@@ -1,20 +1,32 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+/**
+ * Smart Waste Management System - Main App Entry Point
+ * A comprehensive waste collection scheduling and management application
+ * 
+ * @author Kumarasinghe S.S (IT22221414)
+ * @version 1.0.0
+ * @module App
+ */
 
+import React from 'react';
+import { StatusBar } from 'expo-status-bar';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { ToastProvider } from './src/components/Toast';
+import ErrorBoundary from './src/components/ErrorBoundary';
+import AppNavigator from './src/navigation/AppNavigator';
+
+/**
+ * Main App Component
+ * Wraps the entire application with necessary providers and error boundaries
+ */
 export default function App() {
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <SafeAreaProvider>
+      <ErrorBoundary fallbackComponent="AppCrashed" showReloadButton={true}>
+        <ToastProvider>
+          <AppNavigator />
+          <StatusBar style="auto" />
+        </ToastProvider>
+      </ErrorBoundary>
+    </SafeAreaProvider>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
