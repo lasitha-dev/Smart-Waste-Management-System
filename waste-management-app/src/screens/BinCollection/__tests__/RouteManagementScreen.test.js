@@ -7,6 +7,13 @@ import React from 'react';
 import { render, screen } from '@testing-library/react-native';
 import RouteManagementScreen from '../RouteManagementScreen';
 
+// Mock the navigation hook
+jest.mock('@react-navigation/native', () => ({
+  useNavigation: () => ({
+    navigate: jest.fn(),
+  }),
+}));
+
 // Mock the RouteListItem component
 jest.mock('../../../components/RouteListItem', () => {
   const { Text } = require('react-native');

@@ -4,8 +4,16 @@
  */
 
 import React from 'react';
-import { render, screen } from '@testing-library/react-native';
+import { render, screen, fireEvent } from '@testing-library/react-native';
 import RouteListItem from '../RouteListItem';
+
+// Mock the navigation hook
+const mockNavigate = jest.fn();
+jest.mock('@react-navigation/native', () => ({
+  useNavigation: () => ({
+    navigate: mockNavigate,
+  }),
+}));
 
 describe('RouteListItem', () => {
   /**
@@ -18,6 +26,10 @@ describe('RouteListItem', () => {
     status: 'pending',
     priority: 'high',
   };
+
+  beforeEach(() => {
+    mockNavigate.mockClear();
+  });
 
   /**
    * Test: Component renders and displays bin ID and address
@@ -32,5 +44,21 @@ describe('RouteListItem', () => {
 
     expect(binId).toBeVisible();
     expect(address).toBeVisible();
+  });
+
+  /**
+   * Test: Component navigates to ScanBin screen when pressed
+   */
+  it('navigates to ScanBin screen when pressed', () => {
+    // Arrange
+    render(<RouteListItem stop={mockStop} />);
+
+    // Act
+    const listItem = screen.getByTestId('route-item-1');
+    fireEvent.press(listItem);
+
+    // Assert
+    expect(mockNavigate).toHaveBeenCalledTimes(1);
+    expect(mockNavigate).toHaveBeenCalledWith('ScanBin', { stop: mockStop });
   });
 });

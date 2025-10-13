@@ -4,7 +4,8 @@
  */
 
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 import { COLORS, FONTS } from '../constants/theme';
 
 /**
@@ -15,6 +16,8 @@ import { COLORS, FONTS } from '../constants/theme';
  * @returns {JSX.Element} The RouteListItem component
  */
 const RouteListItem = ({ stop }) => {
+  const navigation = useNavigation();
+
   /**
    * Get priority tag color based on priority level
    * @param {string} priority - Priority level (high, medium, low)
@@ -33,8 +36,20 @@ const RouteListItem = ({ stop }) => {
     }
   };
 
+  /**
+   * Handle press event to navigate to ScanBin screen
+   */
+  const handlePress = () => {
+    navigation.navigate('ScanBin', { stop });
+  };
+
   return (
-    <View style={styles.container}>
+    <TouchableOpacity 
+      style={styles.container} 
+      onPress={handlePress}
+      activeOpacity={0.7}
+      testID={`route-item-${stop.id}`}
+    >
       <View style={styles.contentContainer}>
         <View style={styles.mainInfo}>
           <Text style={styles.binId}>{stop.binId}</Text>
@@ -44,7 +59,7 @@ const RouteListItem = ({ stop }) => {
           <Text style={styles.priorityText}>{stop.priority}</Text>
         </View>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 };
 
