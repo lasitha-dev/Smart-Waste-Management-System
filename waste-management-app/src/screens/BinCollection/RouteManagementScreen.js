@@ -3,9 +3,11 @@
  * Displays the route management interface for bin collection
  */
 
-import React from 'react';
-import { View, Text, StyleSheet, SafeAreaView } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, StyleSheet, SafeAreaView, FlatList } from 'react-native';
 import { COLORS, FONTS } from '../../constants/theme';
+import RouteListItem from '../../components/RouteListItem';
+import { MOCK_STOPS } from '../../api/mockData';
 
 /**
  * RouteManagementScreen
@@ -13,11 +15,35 @@ import { COLORS, FONTS } from '../../constants/theme';
  * @returns {JSX.Element} The RouteManagementScreen component
  */
 const RouteManagementScreen = () => {
+  // State to manage the list of stops
+  const [stops, setStops] = useState(MOCK_STOPS);
+  /**
+   * Renders a single route list item
+   * @param {Object} params - Render item parameters
+   * @param {Object} params.item - Stop object
+   * @returns {JSX.Element} RouteListItem component
+   */
+  const renderItem = ({ item }) => <RouteListItem stop={item} />;
+
+  /**
+   * Extracts the key for each item
+   * @param {Object} item - Stop object
+   * @returns {string} Unique key
+   */
+  const keyExtractor = (item) => item.id.toString();
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.title}>Route Management</Text>
       </View>
+      <FlatList
+        data={stops}
+        renderItem={renderItem}
+        keyExtractor={keyExtractor}
+        contentContainerStyle={styles.listContent}
+        testID="route-flatlist"
+      />
     </SafeAreaView>
   );
 };
@@ -35,6 +61,9 @@ const styles = StyleSheet.create({
     fontSize: FONTS.size.subheading,
     fontWeight: FONTS.weight.semiBold,
     color: COLORS.textPrimary,
+  },
+  listContent: {
+    paddingBottom: 20,
   },
 });
 
