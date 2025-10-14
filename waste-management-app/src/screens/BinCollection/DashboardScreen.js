@@ -6,6 +6,7 @@
 import React from 'react';
 import { View, Text, StyleSheet, ScrollView, SafeAreaView } from 'react-native';
 import { COLORS, FONTS } from '../../constants/theme';
+import { useRoute } from '../../context/RouteContext';
 
 /**
  * SummaryCard Component
@@ -24,13 +25,9 @@ const SummaryCard = ({ label, value, color }) => (
  * @returns {JSX.Element} The DashboardScreen component
  */
 const DashboardScreen = () => {
-  // Summary statistics (would come from API/context in real app)
-  const stats = {
-    completed: 24,
-    pending: 8,
-    efficiency: '92%',
-    issues: 2,
-  };
+  // Get dynamic statistics from RouteContext
+  const { getStatistics } = useRoute();
+  const stats = getStatistics();
 
   return (
     <SafeAreaView style={styles.container}>

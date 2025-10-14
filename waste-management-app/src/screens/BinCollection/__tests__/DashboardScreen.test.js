@@ -14,6 +14,19 @@ jest.mock('@react-navigation/native', () => ({
   }),
 }));
 
+// Mock RouteContext
+jest.mock('../../../context/RouteContext', () => ({
+  useRoute: () => ({
+    getStatistics: () => ({
+      completed: 24,
+      pending: 8,
+      efficiency: '92%',
+      issues: 2,
+      total: 32,
+    }),
+  }),
+}));
+
 describe('DashboardScreen', () => {
   /**
    * Test: Screen renders with the greeting title
@@ -55,5 +68,19 @@ describe('DashboardScreen', () => {
     expect(screen.getByText('Pending')).toBeVisible();
     expect(screen.getByText('Efficiency')).toBeVisible();
     expect(screen.getByText('Issues')).toBeVisible();
+  });
+
+  /**
+   * Test: Screen displays dynamic values from context
+   */
+  it('displays dynamic statistics from RouteContext', () => {
+    // Arrange & Act
+    render(<DashboardScreen />);
+
+    // Assert - Check for dynamic values from mocked context
+    expect(screen.getByText('24')).toBeVisible(); // Completed count
+    expect(screen.getByText('8')).toBeVisible(); // Pending count
+    expect(screen.getByText('92%')).toBeVisible(); // Efficiency percentage
+    expect(screen.getByText('2')).toBeVisible(); // Issues count
   });
 });
