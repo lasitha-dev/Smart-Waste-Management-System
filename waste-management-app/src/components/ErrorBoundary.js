@@ -47,7 +47,7 @@ class ErrorBoundary extends React.Component {
    */
   componentDidCatch(error, errorInfo) {
     const appError = new AppError(
-      error.message || 'Component render error',
+      (error && error.message) || 'Component render error',
       ErrorTypes.SYSTEM_ERROR,
       ErrorSeverity.HIGH,
       {
@@ -60,11 +60,13 @@ class ErrorBoundary extends React.Component {
     // Log the error
     ErrorHandler.logError(appError);
 
-    // Update state with error info
-    this.setState({
+    // Update state with error info, preserving hasError and retryCount
+    this.setState(prevState => ({
+      hasError: true,
       error: appError,
-      errorInfo
-    });
+      errorInfo,
+      retryCount: prevState.retryCount // Preserve the retry count
+    }));
 
     // Call optional error callback
     if (this.props.onError) {
@@ -157,8 +159,7 @@ class ErrorBoundary extends React.Component {
 
           {/* Error Message */}
           <Text style={styles.errorMessage}>
-            {customMessage || 
-             error?.message || 
+            {customMessage ||
              'An unexpected error occurred while loading this screen.'}
           </Text>
 

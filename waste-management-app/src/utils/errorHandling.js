@@ -99,6 +99,11 @@ export class ErrorHandler {
    * @returns {string} User-friendly message
    */
   static getUserFriendlyMessage(error, fallbackMessage) {
+    // Handle null/undefined errors
+    if (!error) {
+      return fallbackMessage || 'An unexpected error occurred';
+    }
+
     if (error instanceof AppError) {
       return error.message;
     }
@@ -106,25 +111,25 @@ export class ErrorHandler {
     // Handle specific error patterns
     if (error.message) {
       const message = error.message.toLowerCase();
-      
+
       if (message.includes('network') || message.includes('fetch')) {
         return 'Please check your internet connection and try again.';
       }
-      
+
       if (message.includes('timeout')) {
         return 'The request timed out. Please try again.';
       }
-      
+
       if (message.includes('unauthorized') || message.includes('forbidden')) {
         return 'You do not have permission to perform this action.';
       }
-      
+
       if (message.includes('not found')) {
         return 'The requested resource could not be found.';
       }
     }
 
-    return fallbackMessage;
+    return fallbackMessage || 'An unexpected error occurred';
   }
 
   /**
@@ -162,10 +167,25 @@ export class ErrorHandler {
    * @param {Error|AppError} error - The error to log
    */
   static logError(error) {
+    // Handle null/undefined errors
+    if (!error) {
+      const errorInfo = {
+        message: 'Unknown error occurred',
+        name: 'UnknownError',
+        stack: 'No stack trace available',
+        timestamp: new Date().toISOString()
+      };
+
+      if (__DEV__) {
+        console.warn('ErrorHandler: Attempted to log null/undefined error');
+      }
+      return;
+    }
+
     const errorInfo = {
-      message: error.message,
-      name: error.name,
-      stack: error.stack,
+      message: error.message || 'No message provided',
+      name: error.name || 'Error',
+      stack: error.stack || 'No stack trace available',
       timestamp: new Date().toISOString()
     };
 

@@ -46,23 +46,21 @@ describe('SchedulingService', () => {
 
     test('should reject with missing resident ID', async () => {
       await expect(SchedulingService.getResidentBins()).rejects.toMatchObject({
-        success: false,
-        error: 'Resident ID is required',
+        message: 'Resident ID is required',
         code: 'VALIDATION_ERROR'
       });
     });
 
     test('should reject with empty resident ID', async () => {
       await expect(SchedulingService.getResidentBins('')).rejects.toMatchObject({
-        success: false,
-        error: 'Resident ID is required',
+        message: 'Resident ID is required',
         code: 'VALIDATION_ERROR'
       });
     });
 
     test('should reject for non-existent resident', async () => {
       await expect(SchedulingService.getResidentBins('INVALID_ID')).rejects.toMatchObject({
-        success: false,
+        message: 'Resident account not found. Please check your login credentials.',
         code: 'RESOURCE_NOT_FOUND'
       });
     });

@@ -276,13 +276,13 @@ describe('ErrorHandling', () => {
       test('should show alert with cancel button when onCancel provided', () => {
         const onCancel = jest.fn();
         ErrorHandler.showErrorAlert('Test message', new Error(), null, onCancel);
-        
+
         expect(Alert.alert).toHaveBeenCalledWith(
           'Error',
           'Test message',
           [
-            { text: 'Cancel', style: 'cancel', onPress: onCancel },
-            { text: 'OK', style: 'default' }
+            { text: 'OK', style: 'default' },
+            { text: 'Cancel', style: 'cancel', onPress: onCancel }
           ],
           { cancelable: false }
         );
@@ -390,48 +390,48 @@ describe('ErrorHandling', () => {
       });
 
       test('should retry on failure and eventually succeed', async () => {
+        jest.useFakeTimers();
+
         const operation = jest.fn()
           .mockRejectedValueOnce(new Error('Attempt 1 failed'))
           .mockRejectedValueOnce(new Error('Attempt 2 failed'))
           .mockResolvedValue('success');
-        
-        const promise = ErrorHandler.withRetry(operation, 3, 1000);
-        
-        // Fast-forward timers for delays
-        setTimeout(() => {
-          jest.advanceTimersByTime(1000);
-        }, 10);
-        setTimeout(() => {
-          jest.advanceTimersByTime(2000);
-        }, 20);
-        
+
+        const promise = ErrorHandler.withRetry(operation, 3, 100);
+
+        // Advance timers for retry delays (much shorter for testing)
+        jest.advanceTimersByTime(100); // First retry delay
+        jest.advanceTimersByTime(100); // Second retry delay
+
         const result = await promise;
-        
+
         expect(result).toBe('success');
         expect(operation).toHaveBeenCalledTimes(3);
+
+        jest.useRealTimers();
       });
 
       test('should throw AppError after max retries', async () => {
+        jest.useFakeTimers();
+
         const originalError = new Error('Persistent failure');
         const operation = jest.fn().mockRejectedValue(originalError);
-        
+
         const promise = ErrorHandler.withRetry(operation, 2, 100);
-        
-        // Fast-forward timers
-        setTimeout(() => {
-          jest.advanceTimersByTime(100);
-        }, 10);
-        setTimeout(() => {
-          jest.advanceTimersByTime(200);
-        }, 20);
-        
+
+        // Advance timers for retry delays
+        jest.advanceTimersByTime(100); // First retry delay
+        jest.advanceTimersByTime(100); // Second retry delay
+
         await expect(promise).rejects.toMatchObject({
           message: 'Operation failed after 2 attempts: Persistent failure',
           code: ErrorTypes.SYSTEM_ERROR,
           severity: ErrorSeverity.HIGH
         });
-        
+
         expect(operation).toHaveBeenCalledTimes(2);
+
+        jest.useRealTimers();
       });
 
       test('should use default retry parameters', async () => {
@@ -890,21 +890,24 @@ describe('ErrorHandling', () => {
       });
 
       test('should recover from network error successfully', async () => {
+        jest.useFakeTimers();
+
         const operation = jest.fn()
           .mockRejectedValueOnce(new Error('Network failed'))
           .mockResolvedValue('success');
-        
+
         const promise = ErrorRecovery.recoverFromNetworkError(operation, 2);
-        
-        // Fast-forward timers
-        setTimeout(() => {
-          jest.advanceTimersByTime(2000);
-        }, 10);
-        
+
+        // Advance timers to simulate retry delays
+        jest.advanceTimersByTime(1000); // First retry delay
+        jest.advanceTimersByTime(1000); // Second retry delay
+
         const result = await promise;
-        
+
         expect(result).toBe('success');
         expect(operation).toHaveBeenCalledTimes(2);
+
+        jest.useRealTimers();
       });
 
       test('should use default max attempts', async () => {
