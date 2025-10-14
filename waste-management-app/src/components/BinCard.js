@@ -17,6 +17,8 @@ import {
 } from 'react-native';
 import { InlineLoader } from './LoadingIndicator';
 import { estimateBinWeight, needsAutoPickup } from '../utils/schedulingHelpers';
+import { colors } from '../constants/colors';
+import { typography } from '../constants/typography';
 
 const { width } = Dimensions.get('window');
 
@@ -75,22 +77,30 @@ const BinCard = ({
     }
   };
 
+  /**
+   * Determines the appropriate status color based on bin state
+   * @returns {string} Color code for the current bin status
+   */
   const getStatusColor = () => {
     if (disabled || bin.status !== 'Active') return colors.disabled;
     if (needsAuto) return colors.warning;
-    if (fillPercentage > 70) return colors.high;
-    if (fillPercentage > 40) return colors.medium;
-    return colors.low;
+    if (fillPercentage > 70) return colors.fillHigh;
+    if (fillPercentage > 40) return colors.fillMedium;
+    return colors.fillLow;
   };
 
+  /**
+   * Returns the appropriate emoji icon for the waste bin type
+   * @returns {string} Emoji representing the bin type
+   */
   const getTypeIcon = () => {
-    const icons = {
+    const WASTE_TYPE_ICONS = {
       'General Waste': '🗑️',
       'Recyclable': '♻️',
       'Organic': '🌱',
       'Bulky Items': '📦'
     };
-    return icons[bin.type] || '🗑️';
+    return WASTE_TYPE_ICONS[bin.type] || '🗑️';
   };
 
   return (
@@ -227,22 +237,6 @@ const BinCard = ({
   );
 };
 
-const colors = {
-  primary: '#4CAF50',
-  secondary: '#2196F3',
-  success: '#4CAF50',
-  warning: '#FF9800',
-  error: '#f44336',
-  disabled: '#9E9E9E',
-  low: '#4CAF50',
-  medium: '#FF9800',
-  high: '#f44336',
-  background: '#FFFFFF',
-  surface: '#F5F5F5',
-  text: '#212121',
-  textSecondary: '#757575',
-  border: '#E0E0E0'
-};
 
 const styles = StyleSheet.create({
   container: {
@@ -264,16 +258,16 @@ const styles = StyleSheet.create({
     position: 'relative'
   },
   selected: {
-    borderColor: colors.primary,
-    backgroundColor: '#E8F5E8'
+    borderColor: colors.accent,
+    backgroundColor: colors.toastSuccess
   },
   disabled: {
     opacity: 0.6
   },
   loading: {
     opacity: 0.8,
-    borderColor: colors.primary,
-    backgroundColor: '#F0F8F0'
+    borderColor: colors.accent,
+    backgroundColor: colors.toastInfo
   },
   header: {
     flexDirection: 'row',
@@ -300,7 +294,7 @@ const styles = StyleSheet.create({
     width: 28,
     height: 28,
     borderRadius: 14,
-    backgroundColor: colors.primary,
+    backgroundColor: colors.accent,
     justifyContent: 'center',
     alignItems: 'center',
     marginLeft: 8
@@ -333,7 +327,7 @@ const styles = StyleSheet.create({
   },
   label: {
     fontSize: 14,
-    color: colors.textSecondary,
+    color: colors.textLight,
     fontWeight: '500'
   },
   value: {
@@ -345,7 +339,7 @@ const styles = StyleSheet.create({
     color: colors.success
   },
   inactiveStatus: {
-    color: colors.error
+    color: colors.alert
   },
   fillLevelContainer: {
     marginBottom: 12
@@ -358,7 +352,7 @@ const styles = StyleSheet.create({
   },
   fillLevelLabel: {
     fontSize: 14,
-    color: colors.textSecondary,
+    color: colors.textLight,
     fontWeight: '500'
   },
   fillLevelPercentage: {
@@ -386,7 +380,7 @@ const styles = StyleSheet.create({
   smartBinLabel: {
     fontSize: 12,
     fontWeight: 'bold',
-    color: colors.secondary,
+    color: colors.info,
     marginBottom: 4
   },
   smartFeatures: {
@@ -395,7 +389,7 @@ const styles = StyleSheet.create({
   },
   feature: {
     fontSize: 11,
-    color: colors.textSecondary,
+    color: colors.textLight,
     marginRight: 12,
     marginBottom: 2
   },
@@ -403,7 +397,7 @@ const styles = StyleSheet.create({
     color: colors.success
   },
   featureDisabled: {
-    color: colors.error
+    color: colors.alert
   },
   lastEmptiedContainer: {
     borderTopWidth: 1,
@@ -412,7 +406,7 @@ const styles = StyleSheet.create({
   },
   lastEmptiedText: {
     fontSize: 12,
-    color: colors.textSecondary,
+    color: colors.textLight,
     textAlign: 'center'
   },
   disabledOverlay: {

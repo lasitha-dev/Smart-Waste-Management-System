@@ -1,21 +1,29 @@
 /**
  * Typography Constants
  * Font sizes, weights, and line heights for consistent text styling
+ * Follows CSSE design system specifications
  * 
  * @author Kumarasinghe S.S (IT22221414)
  * @module Typography
  */
 
 export const typography = {
-  // Font sizes
+  // Font families (CSSE specified)
+  fontFamily: {
+    primary: 'Inter',        // Primary font family as per CSSE rules
+    secondary: 'Poppins',    // Alternative font family as per CSSE rules
+    system: 'System',        // System fallback
+  },
+  
+  // Font sizes (updated to match CSSE specifications)
   fontSize: {
     xs: 10,
     sm: 12,
-    md: 14,
-    lg: 16,
-    xl: 18,
+    md: 14,         // Body/List Items: Regular, ~14-16pt
+    lg: 16,         // Body/List Items: Regular, ~14-16pt
+    xl: 18,         // Subheadings: Semi-bold, ~18pt
     xxl: 20,
-    xxxl: 24,
+    xxxl: 24,       // Headings: Bold, ~24pt
     display: 32,
     hero: 40,
   },
@@ -38,64 +46,75 @@ export const typography = {
     loose: 1.8,
   },
   
-  // Text styles for common components
+  // Text styles for common components (CSSE compliant)
   styles: {
-    // Headers
+    // Headers (using CSSE specifications)
     h1: {
+      fontFamily: 'Inter',
       fontSize: 32,
       fontWeight: '700',
       lineHeight: 40,
     },
     h2: {
-      fontSize: 24,
+      fontFamily: 'Inter',
+      fontSize: 24,        // Headings: Bold, ~24pt (CSSE spec)
       fontWeight: '700', 
       lineHeight: 32,
     },
     h3: {
+      fontFamily: 'Inter',
       fontSize: 20,
       fontWeight: '600',
       lineHeight: 28,
     },
     h4: {
-      fontSize: 18,
+      fontFamily: 'Inter',
+      fontSize: 18,        // Subheadings: Semi-bold, ~18pt (CSSE spec)
       fontWeight: '600',
       lineHeight: 24,
     },
     h5: {
+      fontFamily: 'Inter',
       fontSize: 16,
       fontWeight: '600',
       lineHeight: 22,
     },
     h6: {
+      fontFamily: 'Inter',
       fontSize: 14,
       fontWeight: '600',
       lineHeight: 20,
     },
     
-    // Body text
+    // Body text (using CSSE specifications)
     body1: {
-      fontSize: 16,
+      fontFamily: 'Inter',
+      fontSize: 16,        // Body/List Items: Regular, ~14-16pt (CSSE spec)
       fontWeight: '400',
       lineHeight: 24,
     },
     body2: {
-      fontSize: 14,
+      fontFamily: 'Inter',
+      fontSize: 14,        // Body/List Items: Regular, ~14-16pt (CSSE spec)
       fontWeight: '400',
       lineHeight: 20,
     },
     
     // UI text
     button: {
+      fontFamily: 'Inter',
       fontSize: 16,
       fontWeight: '600',
       lineHeight: 24,
     },
     caption: {
+      fontFamily: 'Inter',
       fontSize: 12,
       fontWeight: '400',
       lineHeight: 16,
     },
     overline: {
+      fontFamily: 'Inter',
       fontSize: 10,
       fontWeight: '600',
       lineHeight: 16,
@@ -105,16 +124,19 @@ export const typography = {
     
     // Form elements
     input: {
+      fontFamily: 'Inter',
       fontSize: 16,
       fontWeight: '400',
       lineHeight: 24,
     },
     label: {
+      fontFamily: 'Inter',
       fontSize: 14,
       fontWeight: '500',
       lineHeight: 20,
     },
     helper: {
+      fontFamily: 'Inter',
       fontSize: 12,
       fontWeight: '400',
       lineHeight: 16,
@@ -126,6 +148,26 @@ export const typography = {
       fontSize: 14,
       fontWeight: '400',
       lineHeight: 20,
+    },
+    
+    // CSSE specific styles
+    greeting: {
+      fontFamily: 'Inter',
+      fontSize: 24,        // "Good Morning, Alex!": Bold, ~24pt
+      fontWeight: '700',
+      lineHeight: 32,
+    },
+    subheading: {
+      fontFamily: 'Inter',
+      fontSize: 18,        // "Route Management": Semi-bold, ~18pt
+      fontWeight: '600',
+      lineHeight: 24,
+    },
+    listItem: {
+      fontFamily: 'Inter',
+      fontSize: 16,        // Body/List Items: Regular, ~14-16pt
+      fontWeight: '400',
+      lineHeight: 24,
     },
   },
 };

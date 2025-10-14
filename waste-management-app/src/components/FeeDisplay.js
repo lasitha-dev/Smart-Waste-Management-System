@@ -224,7 +224,9 @@ const FeeDisplay = ({
         </TouchableOpacity>
 
         {/* Fee Breakdown */}
-        {renderFeeBreakdown()}
+        <View testID="fee-breakdown">
+          {renderFeeBreakdown()}
+        </View>
 
         {/* Additional Info */}
         {feeData && (

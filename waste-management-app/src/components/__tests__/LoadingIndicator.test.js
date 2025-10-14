@@ -1,20 +1,31 @@
 /**
  * LoadingIndicator Component Tests
- * Comprehensive unit tests for LoadingIndicator and related components
+ * Comprehensive unit tests for LoadingIndicator and related components with >80% coverage
  * 
  * @author Kumarasinghe S.S (IT22221414)
  */
 
 import React from 'react';
-import { render, fireEvent, waitFor } from '@testing-library/react-native';
+import { render, fireEvent, waitFor, act } from '@testing-library/react-native';
 import LoadingIndicator, { 
   InlineLoader, 
   PageLoader, 
   SkeletonLoader 
-} from '../components/LoadingIndicator';
+} from '../LoadingIndicator';
 
 // Mock react-native modules that aren't available in test environment
 jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper');
+
+// Mock Dimensions
+jest.mock('react-native', () => {
+  const RN = jest.requireActual('react-native');
+  return {
+    ...RN,
+    Dimensions: {
+      get: jest.fn(() => ({ width: 375, height: 812 }))
+    }
+  };
+});
 
 describe('LoadingIndicator', () => {
   beforeEach(() => {

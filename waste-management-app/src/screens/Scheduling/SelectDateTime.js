@@ -350,7 +350,7 @@ const SelectDateTimeScreen = ({ navigation, route }) => {
           ]}
           onPress={handleContinue}
           disabled={!canContinue}
-          testID="continue-to-confirmation"
+          testID="continue-button"
         >
           <Text style={[
             styles.continueButtonText,

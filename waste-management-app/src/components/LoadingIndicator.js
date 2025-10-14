@@ -16,7 +16,7 @@ import {
   Easing,
   Dimensions
 } from 'react-native';
-import colors from '../constants/colors';
+import { colors } from '../constants/colors';
 import spacing from '../constants/spacing';
 import typography from '../constants/typography';
 
@@ -25,18 +25,19 @@ const { width } = Dimensions.get('window');
 /**
  * LoadingIndicator component for various loading states
  * @param {Object} props - Component props
- * @param {string} props.type - Type of loading indicator ('spinner', 'dots', 'pulse', 'skeleton')
- * @param {string} props.size - Size of indicator ('small', 'medium', 'large')
- * @param {string} props.text - Loading text to display
- * @param {string} props.color - Primary color for the indicator
- * @param {boolean} props.overlay - Whether to show as full screen overlay
- * @param {string} props.style - Additional styles
+ * @param {('spinner'|'dots'|'pulse'|'skeleton')} [props.type='spinner'] - Type of loading indicator
+ * @param {('small'|'medium'|'large')} [props.size='medium'] - Size of indicator
+ * @param {string} [props.text='Loading...'] - Loading text to display
+ * @param {string} [props.color='#34D399'] - Primary color for the indicator (uses CSSE accent color)
+ * @param {boolean} [props.overlay=false] - Whether to show as full screen overlay
+ * @param {Object} [props.style] - Additional styles
+ * @returns {React.Component} LoadingIndicator component
  */
 const LoadingIndicator = ({
   type = 'spinner',
   size = 'medium',
   text = 'Loading...',
-  color = '#4CAF50',
+  color = colors.accent,
   overlay = false,
   style
 }) => {
@@ -52,6 +53,9 @@ const LoadingIndicator = ({
     startAnimation();
   }, [type]);
 
+  /**
+   * Starts the appropriate animation based on type
+   */
   const startAnimation = () => {
     switch (type) {
       case 'pulse':
@@ -65,6 +69,9 @@ const LoadingIndicator = ({
     }
   };
 
+  /**
+   * Starts the spinner rotation animation
+   */
   const startSpinnerAnimation = () => {
     Animated.loop(
       Animated.timing(animatedValue, {
@@ -76,6 +83,9 @@ const LoadingIndicator = ({
     ).start();
   };
 
+  /**
+   * Starts the pulse scaling animation
+   */
   const startPulseAnimation = () => {
     Animated.loop(
       Animated.sequence([
@@ -95,6 +105,9 @@ const LoadingIndicator = ({
     ).start();
   };
 
+  /**
+   * Starts the dots sequence animation
+   */
   const startDotsAnimation = () => {
     const animateDots = () => {
       const animations = dotValues.map((value, index) =>
@@ -123,13 +136,17 @@ const LoadingIndicator = ({
     animateDots();
   };
 
+  /**
+   * Gets size configuration based on size prop
+   * @returns {Object} Size configuration object
+   */
   const getSizeConfig = () => {
-    const configs = {
+    const SIZE_CONFIGS = {
       small: { iconSize: 20, textSize: 12, spacing: 8 },
       medium: { iconSize: 30, textSize: 14, spacing: 12 },
       large: { iconSize: 40, textSize: 16, spacing: 16 }
     };
-    return configs[size] || configs.medium;
+    return SIZE_CONFIGS[size] || SIZE_CONFIGS.medium;
   };
 
   const sizeConfig = getSizeConfig();
@@ -252,10 +269,16 @@ const LoadingIndicator = ({
 
 /**
  * Inline loading component for buttons and small areas
+ * @param {Object} props - Component props
+ * @param {('small'|'large')} [props.size='small'] - Size of the activity indicator
+ * @param {string} [props.color='#FFFFFF'] - Color of the activity indicator
+ * @param {string} [props.text=''] - Optional text to display next to indicator
+ * @param {Object} [props.style] - Additional styles
+ * @returns {React.Component} Inline loader component
  */
 export const InlineLoader = ({ 
   size = 'small', 
-  color = '#FFFFFF', 
+  color = colors.textPrimary, 
   text = '', 
   style 
 }) => (
@@ -266,7 +289,12 @@ export const InlineLoader = ({
 );
 
 /**
- * Page loading overlay component
+ * Page loading overlay component for full-screen loading states
+ * @param {Object} props - Component props
+ * @param {string} [props.text='Loading...'] - Loading text to display
+ * @param {boolean} [props.visible=true] - Whether the loader is visible
+ * @param {boolean} [props.transparent=false] - Whether to use transparent background
+ * @returns {React.Component|null} Page loader component or null if not visible
  */
 export const PageLoader = ({ 
   text = 'Loading...', 
@@ -285,7 +313,7 @@ export const PageLoader = ({
           type="pulse"
           size="large"
           text={text}
-          color="#4CAF50"
+          color={colors.accent}
         />
       </View>
     </View>
@@ -293,7 +321,11 @@ export const PageLoader = ({
 };
 
 /**
- * Skeleton loading component for list items
+ * Skeleton loading component for list items and content placeholders
+ * @param {Object} props - Component props  
+ * @param {number} [props.count=3] - Number of skeleton items to render
+ * @param {Object} [props.style] - Additional styles
+ * @returns {React.Component} Skeleton loader component
  */
 export const SkeletonLoader = ({ count = 3, style }) => (
   <View style={style}>
@@ -332,7 +364,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center'
   },
   text: {
-    color: colors.textSecondary,
+    color: colors.textLight,
     textAlign: 'center'
   },
   spinner: {
