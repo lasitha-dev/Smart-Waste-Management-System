@@ -6,6 +6,7 @@
 import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react-native';
 import RouteManagementScreen from '../RouteManagementScreen';
+import { RouteProvider } from '../../../context/RouteContext';
 
 // Mock the navigation hook
 jest.mock('@react-navigation/native', () => ({
@@ -66,8 +67,12 @@ describe('RouteManagementScreen Integration Tests', () => {
    * Integration Test: Simulate successful bin collection and verify status change
    */
   it('updates the first item status to completed after confirming collection', async () => {
-    // Arrange - Render the full screen with real components
-    render(<RouteManagementScreen />);
+    // Arrange - Render the full screen with RouteProvider
+    render(
+      <RouteProvider>
+        <RouteManagementScreen />
+      </RouteProvider>
+    );
 
     // Verify initial state - item should not have completed badge
     expect(screen.queryByTestId('status-1')).toBeNull();
@@ -109,7 +114,11 @@ describe('RouteManagementScreen Integration Tests', () => {
    */
   it('only updates the selected item status, leaving others unchanged', async () => {
     // Arrange
-    render(<RouteManagementScreen />);
+    render(
+      <RouteProvider>
+        <RouteManagementScreen />
+      </RouteProvider>
+    );
 
     // Act - Complete the first item
     const firstItem = screen.getByTestId('route-item-1');

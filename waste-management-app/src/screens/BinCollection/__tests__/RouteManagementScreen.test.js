@@ -7,10 +7,45 @@ import React from 'react';
 import { render, screen } from '@testing-library/react-native';
 import RouteManagementScreen from '../RouteManagementScreen';
 
+/**
+ * Mock stop data for testing
+ */
+const mockStops = [
+  {
+    id: 1,
+    binId: 'BIN-001',
+    address: '123 Main Street, Downtown',
+    status: 'pending',
+    priority: 'high',
+  },
+  {
+    id: 2,
+    binId: 'BIN-002',
+    address: '456 Oak Avenue, Westside',
+    status: 'pending',
+    priority: 'medium',
+  },
+  {
+    id: 3,
+    binId: 'BIN-003',
+    address: '789 Pine Road, Eastside',
+    status: 'pending',
+    priority: 'low',
+  },
+];
+
 // Mock the navigation hook
 jest.mock('@react-navigation/native', () => ({
   useNavigation: () => ({
     navigate: jest.fn(),
+  }),
+}));
+
+// Mock the RouteContext
+jest.mock('../../../context/RouteContext', () => ({
+  useRoute: () => ({
+    stops: mockStops,
+    updateStopStatus: jest.fn(),
   }),
 }));
 
@@ -19,33 +54,6 @@ jest.mock('../../../components/RouteListItem', () => {
   const { Text } = require('react-native');
   return ({ stop }) => <Text testID={`route-item-${stop.id}`}>{stop.binId}</Text>;
 });
-
-// Mock the mockData import with our test data
-jest.mock('../../../api/mockData', () => ({
-  MOCK_STOPS: [
-    {
-      id: 1,
-      binId: 'BIN-001',
-      address: '123 Main Street, Downtown',
-      status: 'pending',
-      priority: 'high',
-    },
-    {
-      id: 2,
-      binId: 'BIN-002',
-      address: '456 Oak Avenue, Westside',
-      status: 'pending',
-      priority: 'medium',
-    },
-    {
-      id: 3,
-      binId: 'BIN-003',
-      address: '789 Pine Road, Eastside',
-      status: 'pending',
-      priority: 'low',
-    },
-  ],
-}));
 
 describe('RouteManagementScreen', () => {
   /**

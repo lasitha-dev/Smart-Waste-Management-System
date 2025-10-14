@@ -3,11 +3,11 @@
  * Displays the route management interface for bin collection
  */
 
-import React, { useState } from 'react';
+import React from 'react';
 import { View, Text, StyleSheet, SafeAreaView, FlatList } from 'react-native';
 import { COLORS, FONTS } from '../../constants/theme';
 import RouteListItem from '../../components/RouteListItem';
-import { MOCK_STOPS } from '../../api/mockData';
+import { useRoute } from '../../context/RouteContext';
 
 /**
  * RouteManagementScreen
@@ -15,21 +15,8 @@ import { MOCK_STOPS } from '../../api/mockData';
  * @returns {JSX.Element} The RouteManagementScreen component
  */
 const RouteManagementScreen = () => {
-  // State to manage the list of stops
-  const [stops, setStops] = useState(MOCK_STOPS);
-
-  /**
-   * Updates the status of a stop
-   * @param {number} stopId - ID of the stop to update
-   * @param {string} newStatus - New status value
-   */
-  const updateStopStatus = (stopId, newStatus) => {
-    setStops((prevStops) =>
-      prevStops.map((stop) =>
-        stop.id === stopId ? { ...stop, status: newStatus } : stop
-      )
-    );
-  };
+  // Get route data and functions from context
+  const { stops, updateStopStatus } = useRoute();
 
   /**
    * Renders a single route list item
