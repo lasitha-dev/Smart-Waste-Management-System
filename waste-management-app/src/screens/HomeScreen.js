@@ -21,6 +21,7 @@ import SchedulingService from '../api/schedulingService';
 import { mockResident } from '../api/mockData';
 import { NavigationHelpers } from '../navigation/NavigationHelpers';
 import { needsAutoPickup } from '../utils/schedulingHelpers';
+import { COLORS, FONTS, STYLES, createTextStyle } from '../constants/theme';
 import colors from '../constants/colors';
 import spacing from '../constants/spacing';
 import typography from '../constants/typography';
@@ -180,8 +181,8 @@ const HomeScreen = ({ navigation }) => {
                     styles.fillLevelProgress,
                     { 
                       width: `${bin.currentFillLevel}%`,
-                      backgroundColor: bin.currentFillLevel > 80 ? '#f44336' : 
-                                     bin.currentFillLevel > 50 ? '#FF9800' : '#4CAF50'
+                      backgroundColor: bin.currentFillLevel > 80 ? COLORS.alertRed : 
+                                     bin.currentFillLevel > 50 ? COLORS.highPriorityRed : COLORS.accentGreen
                     }
                   ]} 
                 />
@@ -263,7 +264,7 @@ const HomeScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: colors.background
+    backgroundColor: COLORS.cardBackground
   },
   content: {
     flex: 1
@@ -278,36 +279,35 @@ const styles = StyleSheet.create({
     marginBottom: 16
   },
   loadingText: {
-    fontSize: 16,
-    color: colors.textSecondary
+    fontSize: FONTS.size.body,
+    fontWeight: FONTS.weight.regular,
+    color: COLORS.textSecondary
   },
   welcomeSection: {
+    ...STYLES.header,
     padding: 24,
-    backgroundColor: colors.primary,
   },
   welcomeText: {
-    fontSize: 16,
-    color: 'white',
-    opacity: 0.9
+    fontSize: FONTS.size.body,
+    fontWeight: FONTS.weight.regular,
+    color: COLORS.textSecondary
   },
   userName: {
-    fontSize: 28,
-    fontWeight: 'bold',
-    color: 'white',
+    ...STYLES.headerTitle,
     marginBottom: 4
   },
   welcomeSubtext: {
-    fontSize: 14,
-    color: 'white',
-    opacity: 0.8
+    fontSize: FONTS.size.small,
+    fontWeight: FONTS.weight.regular,
+    color: COLORS.textSecondary
   },
   urgentAlert: {
     margin: 16,
     padding: 16,
-    backgroundColor: '#FFEBEE',
+    backgroundColor: COLORS.modalBackground,
     borderRadius: 12,
     borderLeftWidth: 4,
-    borderLeftColor: colors.error
+    borderLeftColor: COLORS.alertRed
   },
   alertHeader: {
     flexDirection: 'row',
@@ -319,28 +319,26 @@ const styles = StyleSheet.create({
     marginRight: 8
   },
   alertTitle: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    color: colors.error
+    fontSize: FONTS.size.body,
+    fontWeight: FONTS.weight.bold,
+    color: COLORS.alertRed
   },
   alertMessage: {
-    fontSize: 14,
+    fontSize: FONTS.size.small,
+    fontWeight: FONTS.weight.regular,
     color: colors.text,
     marginBottom: 8
   },
   alertAction: {
-    fontSize: 14,
-    color: colors.error,
-    fontWeight: '600'
+    fontSize: FONTS.size.small,
+    fontWeight: FONTS.weight.semiBold,
+    color: COLORS.alertRed
   },
   quickActionsSection: {
     padding: 16
   },
   sectionTitle: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    color: colors.text,
-    marginBottom: 16
+    ...STYLES.sectionTitle
   },
   actionsGrid: {
     flexDirection: 'row',
@@ -348,32 +346,26 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between'
   },
   actionCard: {
+    ...STYLES.card,
     width: '48%',
-    backgroundColor: colors.background,
-    borderRadius: 12,
-    padding: 16,
-    marginBottom: 12,
+    backgroundColor: COLORS.modalBackground,
     alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,
-    borderWidth: 1,
-    borderColor: colors.border
+    marginVertical: 6,
+    marginHorizontal: 4,
   },
   actionIcon: {
     fontSize: 32,
     marginBottom: 8
   },
   actionTitle: {
-    fontSize: 14,
-    fontWeight: 'bold',
+    fontSize: FONTS.size.small,
+    fontWeight: FONTS.weight.bold,
     color: colors.text,
     marginBottom: 4
   },
   actionSubtitle: {
-    fontSize: 12,
+    fontSize: FONTS.size.small - 2,
+    fontWeight: FONTS.weight.regular,
     color: colors.textSecondary,
     textAlign: 'center'
   },
@@ -381,21 +373,22 @@ const styles = StyleSheet.create({
     padding: 16
   },
   binOverviewCard: {
-    backgroundColor: colors.surface,
-    borderRadius: 12,
-    padding: 16,
+    ...STYLES.card,
+    backgroundColor: COLORS.modalBackground,
     marginRight: 12,
+    marginVertical: 0,
     minWidth: 140,
     position: 'relative'
   },
   binType: {
-    fontSize: 14,
-    fontWeight: 'bold',
+    fontSize: FONTS.size.small,
+    fontWeight: FONTS.weight.bold,
     color: colors.text,
     marginBottom: 4
   },
   binLocation: {
-    fontSize: 12,
+    fontSize: FONTS.size.small - 2,
+    fontWeight: FONTS.weight.regular,
     color: colors.textSecondary,
     marginBottom: 12
   },
@@ -403,13 +396,14 @@ const styles = StyleSheet.create({
     marginBottom: 8
   },
   fillLevelText: {
-    fontSize: 12,
+    fontSize: FONTS.size.small - 2,
+    fontWeight: FONTS.weight.regular,
     color: colors.textSecondary,
     marginBottom: 4
   },
   fillLevelBar: {
     height: 6,
-    backgroundColor: '#E0E0E0',
+    backgroundColor: COLORS.textSecondary,
     borderRadius: 3,
     overflow: 'hidden'
   },
@@ -421,10 +415,10 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 8,
     right: 8,
-    backgroundColor: colors.error,
-    color: 'white',
+    backgroundColor: COLORS.alertRed,
+    color: COLORS.textPrimary,
     fontSize: 8,
-    fontWeight: 'bold',
+    fontWeight: FONTS.weight.bold,
     paddingHorizontal: 6,
     paddingVertical: 2,
     borderRadius: 8
@@ -433,10 +427,8 @@ const styles = StyleSheet.create({
     padding: 16
   },
   bookingCard: {
-    backgroundColor: colors.surface,
-    borderRadius: 12,
-    padding: 16,
-    marginBottom: 12
+    ...STYLES.card,
+    backgroundColor: COLORS.modalBackground,
   },
   bookingHeader: {
     flexDirection: 'row',
@@ -445,18 +437,19 @@ const styles = StyleSheet.create({
     marginBottom: 8
   },
   bookingDate: {
-    fontSize: 16,
-    fontWeight: 'bold',
+    fontSize: FONTS.size.body,
+    fontWeight: FONTS.weight.bold,
     color: colors.text
   },
   bookingStatus: {
-    fontSize: 12,
-    color: colors.success,
-    fontWeight: '600',
+    fontSize: FONTS.size.small - 2,
+    fontWeight: FONTS.weight.semiBold,
+    color: COLORS.accentGreen,
     textTransform: 'uppercase'
   },
   bookingDetails: {
-    fontSize: 14,
+    fontSize: FONTS.size.small,
+    fontWeight: FONTS.weight.regular,
     color: colors.textSecondary
   }
 });

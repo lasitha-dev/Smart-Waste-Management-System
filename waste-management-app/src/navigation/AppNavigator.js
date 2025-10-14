@@ -11,6 +11,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Platform, Text, View, StyleSheet } from 'react-native';
+import { COLORS, FONTS, STYLES } from '../constants/theme';
 
 // Import navigators
 import SchedulingNavigator from './SchedulingNavigator';
@@ -32,18 +33,18 @@ const MainTabNavigator = () => {
       screenOptions={{
         headerShown: false,
         tabBarStyle: {
-          backgroundColor: '#FFFFFF',
+          backgroundColor: COLORS.modalBackground,
           borderTopWidth: 1,
-          borderTopColor: '#E0E0E0',
+          borderTopColor: COLORS.textSecondary,
           paddingBottom: Platform.OS === 'ios' ? 20 : 5,
           paddingTop: 5,
           height: Platform.OS === 'ios' ? 85 : 60,
         },
-        tabBarActiveTintColor: '#4CAF50',
-        tabBarInactiveTintColor: '#757575',
+        tabBarActiveTintColor: COLORS.accentGreen,
+        tabBarInactiveTintColor: COLORS.textSecondary,
         tabBarLabelStyle: {
-          fontSize: 12,
-          fontWeight: '600',
+          fontSize: FONTS.size.small - 2,
+          fontWeight: FONTS.weight.semiBold,
         },
       }}
     >

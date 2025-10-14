@@ -21,6 +21,8 @@ import {
 } from 'react-native';
 import { InlineLoader } from './LoadingIndicator';
 import { StatusMessage } from './Toast';
+import { COLORS, FONTS, STYLES, createButtonStyle } from '../constants/theme';
+import colors from '../constants/colors';
 
 const { width } = Dimensions.get('window');
 
@@ -361,24 +363,12 @@ const FeedbackForm = ({
   );
 };
 
-const colors = {
-  primary: '#4CAF50',
-  secondary: '#2196F3',
-  success: '#4CAF50',
-  warning: '#FF9800',
-  error: '#f44336',
-  disabled: '#9E9E9E',
-  background: '#FFFFFF',
-  surface: '#F5F5F5',
-  text: '#212121',
-  textSecondary: '#757575',
-  border: '#E0E0E0'
-};
+// Using theme colors from constants/theme.js
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: colors.background
+    backgroundColor: COLORS.cardBackground
   },
   scrollContainer: {
     flex: 1
@@ -387,17 +377,18 @@ const styles = StyleSheet.create({
     padding: 24,
     alignItems: 'center',
     borderBottomWidth: 1,
-    borderBottomColor: colors.border
+    borderBottomColor: COLORS.textSecondary
   },
   title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: colors.text,
+    fontSize: FONTS.size.heading,
+    fontWeight: FONTS.weight.bold,
+    color: COLORS.primaryDarkTeal,
     marginBottom: 8
   },
   subtitle: {
-    fontSize: 16,
-    color: colors.textSecondary,
+    fontSize: FONTS.size.body,
+    fontWeight: FONTS.weight.regular,
+    color: COLORS.textSecondary,
     textAlign: 'center',
     lineHeight: 22
   },
@@ -408,9 +399,9 @@ const styles = StyleSheet.create({
     borderRadius: 12
   },
   contextTitle: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    color: colors.text,
+    fontSize: FONTS.size.body,
+    fontWeight: FONTS.weight.bold,
+    color: COLORS.primaryDarkTeal,
     marginBottom: 12
   },
   contextRow: {
@@ -420,22 +411,23 @@ const styles = StyleSheet.create({
     marginBottom: 6
   },
   contextLabel: {
-    fontSize: 14,
-    color: colors.textSecondary
+    fontSize: FONTS.size.small,
+    fontWeight: FONTS.weight.regular,
+    color: COLORS.textSecondary
   },
   contextValue: {
-    fontSize: 14,
-    fontWeight: '600',
-    color: colors.text
+    fontSize: FONTS.size.small,
+    fontWeight: FONTS.weight.semiBold,
+    color: COLORS.primaryDarkTeal
   },
   ratingContainer: {
     padding: 24,
     alignItems: 'center'
   },
   ratingLabel: {
-    fontSize: 18,
-    fontWeight: '600',
-    color: colors.text,
+    fontSize: FONTS.size.subheading,
+    fontWeight: FONTS.weight.semiBold,
+    color: COLORS.primaryDarkTeal,
     marginBottom: 20
   },
   starsContainer: {
@@ -457,51 +449,53 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   ratingText: {
-    fontSize: 18,
-    fontWeight: 'bold',
+    fontSize: FONTS.size.subheading,
+    fontWeight: FONTS.weight.bold,
     marginBottom: 4
   },
   ratingSubtext: {
-    fontSize: 14,
-    color: colors.textSecondary
+    fontSize: FONTS.size.small,
+    fontWeight: FONTS.weight.regular,
+    color: COLORS.textSecondary
   },
   commentContainer: {
     padding: 20
   },
   commentLabel: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: colors.text,
+    fontSize: FONTS.size.body,
+    fontWeight: FONTS.weight.semiBold,
+    color: COLORS.primaryDarkTeal,
     marginBottom: 12
   },
   commentInput: {
     borderWidth: 2,
-    borderColor: colors.border,
+    borderColor: COLORS.textSecondary,
     borderRadius: 12,
     padding: 16,
-    fontSize: 16,
-    color: colors.text,
-    backgroundColor: colors.background,
+    fontSize: FONTS.size.body,
+    color: COLORS.primaryDarkTeal,
+    backgroundColor: COLORS.modalBackground,
     minHeight: 120,
     textAlignVertical: 'top'
   },
   disabledInput: {
-    backgroundColor: colors.surface,
-    color: colors.disabled
+    backgroundColor: COLORS.cardBackground,
+    color: COLORS.textSecondary
   },
   errorInput: {
-    borderColor: colors.error
+    borderColor: COLORS.alertRed
   },
   commentFooter: {
     alignItems: 'flex-end',
     marginTop: 8
   },
   characterCount: {
-    fontSize: 12,
-    color: colors.textSecondary
+    fontSize: FONTS.size.small - 2,
+    fontWeight: FONTS.weight.regular,
+    color: COLORS.textSecondary
   },
   characterCountWarning: {
-    color: colors.warning
+    color: COLORS.highPriorityRed
   },
   errorMessage: {
     marginHorizontal: 20,
@@ -512,18 +506,19 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     margin: 20,
     padding: 16,
-    backgroundColor: '#FFEBEE',
+    backgroundColor: COLORS.modalBackground,
     borderRadius: 8,
     borderLeftWidth: 4,
-    borderLeftColor: colors.error
+    borderLeftColor: COLORS.alertRed
   },
   errorIcon: {
     fontSize: 20,
     marginRight: 12
   },
   errorText: {
-    fontSize: 14,
-    color: colors.error,
+    fontSize: FONTS.size.small,
+    fontWeight: FONTS.weight.regular,
+    color: COLORS.alertRed,
     flex: 1
   },
   actionsContainer: {
@@ -531,56 +526,39 @@ const styles = StyleSheet.create({
     gap: 12
   },
   submitButton: {
-    backgroundColor: colors.primary,
-    paddingVertical: 16,
-    paddingHorizontal: 24,
-    borderRadius: 12,
-    alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3
+    ...STYLES.button,
+    ...STYLES.primaryButton,
   },
   submitButtonText: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    color: 'white'
+    ...STYLES.buttonText
   },
   skipButton: {
-    backgroundColor: 'transparent',
-    paddingVertical: 16,
-    paddingHorizontal: 24,
-    borderRadius: 12,
-    alignItems: 'center',
-    borderWidth: 2,
-    borderColor: colors.border
+    ...STYLES.button,
+    ...STYLES.secondaryButton,
+    borderColor: COLORS.textSecondary
   },
   skipButtonText: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: colors.textSecondary
+    ...STYLES.secondaryButtonText,
+    color: COLORS.textSecondary
   },
   disabledButton: {
-    backgroundColor: colors.disabled,
-    borderColor: colors.disabled
+    backgroundColor: COLORS.textSecondary,
+    borderColor: COLORS.textSecondary
   },
   disabledButtonText: {
-    color: 'white'
+    color: COLORS.textPrimary
   },
   privacyNote: {
     margin: 20,
     padding: 16,
-    backgroundColor: '#E3F2FD',
+    backgroundColor: COLORS.modalBackground,
     borderRadius: 8,
     alignItems: 'center'
   },
   privacyText: {
-    fontSize: 12,
-    color: colors.secondary,
+    fontSize: FONTS.size.small - 2,
+    fontWeight: FONTS.weight.regular,
+    color: COLORS.primaryDarkTeal,
     textAlign: 'center',
     lineHeight: 18
   }

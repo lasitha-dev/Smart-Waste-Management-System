@@ -17,7 +17,8 @@ import {
 } from 'react-native';
 import { InlineLoader } from './LoadingIndicator';
 import { estimateBinWeight, needsAutoPickup } from '../utils/schedulingHelpers';
-import { colors } from '../constants/colors';
+import { COLORS, FONTS, STYLES, createTextStyle } from '../constants/theme';
+import colors from '../constants/colors';
 import { typography } from '../constants/typography';
 
 const { width } = Dimensions.get('window');
@@ -83,10 +84,10 @@ const BinCard = ({
    */
   const getStatusColor = () => {
     if (disabled || bin.status !== 'Active') return colors.disabled;
-    if (needsAuto) return colors.warning;
-    if (fillPercentage > 70) return colors.fillHigh;
-    if (fillPercentage > 40) return colors.fillMedium;
-    return colors.fillLow;
+    if (needsAuto) return COLORS.alertRed;
+    if (fillPercentage > 70) return COLORS.highPriorityRed;
+    if (fillPercentage > 40) return COLORS.accentGreen;
+    return COLORS.progressStart;
   };
 
   /**
@@ -240,34 +241,24 @@ const BinCard = ({
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: colors.background,
-    borderRadius: 12,
-    padding: 16,
-    marginVertical: 8,
+    ...STYLES.card,
+    backgroundColor: COLORS.cardBackground,
     marginHorizontal: 16,
     borderWidth: 2,
     borderColor: colors.border,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,
     position: 'relative'
   },
   selected: {
-    borderColor: colors.accent,
-    backgroundColor: colors.toastSuccess
+    borderColor: COLORS.accentGreen,
+    backgroundColor: COLORS.modalBackground
   },
   disabled: {
     opacity: 0.6
   },
   loading: {
     opacity: 0.8,
-    borderColor: colors.accent,
-    backgroundColor: colors.toastInfo
+    borderColor: COLORS.accentGreen,
+    backgroundColor: COLORS.modalBackground
   },
   header: {
     flexDirection: 'row',
@@ -285,8 +276,8 @@ const styles = StyleSheet.create({
     marginRight: 8
   },
   typeText: {
-    fontSize: 18,
-    fontWeight: 'bold',
+    fontSize: FONTS.size.subheading,
+    fontWeight: FONTS.weight.bold,
     color: colors.text,
     flex: 1
   },
@@ -294,27 +285,27 @@ const styles = StyleSheet.create({
     width: 28,
     height: 28,
     borderRadius: 14,
-    backgroundColor: colors.accent,
+    backgroundColor: COLORS.accentGreen,
     justifyContent: 'center',
     alignItems: 'center',
     marginLeft: 8
   },
   checkmarkText: {
-    color: 'white',
-    fontSize: 16,
-    fontWeight: 'bold'
+    color: COLORS.textPrimary,
+    fontSize: FONTS.size.body,
+    fontWeight: FONTS.weight.bold
   },
   autoPickupBadge: {
-    backgroundColor: colors.warning,
+    backgroundColor: COLORS.alertRed,
     paddingHorizontal: 8,
     paddingVertical: 4,
     borderRadius: 12,
     marginLeft: 8
   },
   autoPickupText: {
-    color: 'white',
+    color: COLORS.textPrimary,
     fontSize: 10,
-    fontWeight: 'bold'
+    fontWeight: FONTS.weight.bold
   },
   content: {
     marginBottom: 12
@@ -326,20 +317,20 @@ const styles = StyleSheet.create({
     marginBottom: 6
   },
   label: {
-    fontSize: 14,
-    color: colors.textLight,
-    fontWeight: '500'
+    fontSize: FONTS.size.small,
+    fontWeight: FONTS.weight.regular,
+    color: colors.textLight
   },
   value: {
-    fontSize: 14,
-    color: colors.text,
-    fontWeight: '600'
+    fontSize: FONTS.size.small,
+    fontWeight: FONTS.weight.semiBold,
+    color: colors.text
   },
   activeStatus: {
-    color: colors.success
+    color: COLORS.accentGreen
   },
   inactiveStatus: {
-    color: colors.alert
+    color: COLORS.alertRed
   },
   fillLevelContainer: {
     marginBottom: 12
@@ -351,18 +342,18 @@ const styles = StyleSheet.create({
     marginBottom: 6
   },
   fillLevelLabel: {
-    fontSize: 14,
-    color: colors.textLight,
-    fontWeight: '500'
+    fontSize: FONTS.size.small,
+    fontWeight: FONTS.weight.regular,
+    color: colors.textLight
   },
   fillLevelPercentage: {
-    fontSize: 14,
-    color: colors.text,
-    fontWeight: 'bold'
+    fontSize: FONTS.size.small,
+    fontWeight: FONTS.weight.bold,
+    color: colors.text
   },
   progressBarContainer: {
     height: 8,
-    backgroundColor: colors.surface,
+    backgroundColor: COLORS.textSecondary,
     borderRadius: 4,
     overflow: 'hidden'
   },
@@ -372,14 +363,14 @@ const styles = StyleSheet.create({
     minWidth: 2
   },
   smartBinContainer: {
-    backgroundColor: colors.surface,
+    backgroundColor: COLORS.modalBackground,
     padding: 8,
     borderRadius: 8,
     marginBottom: 8
   },
   smartBinLabel: {
-    fontSize: 12,
-    fontWeight: 'bold',
+    fontSize: FONTS.size.small - 2,
+    fontWeight: FONTS.weight.bold,
     color: colors.info,
     marginBottom: 4
   },
@@ -389,15 +380,16 @@ const styles = StyleSheet.create({
   },
   feature: {
     fontSize: 11,
+    fontWeight: FONTS.weight.regular,
     color: colors.textLight,
     marginRight: 12,
     marginBottom: 2
   },
   featureEnabled: {
-    color: colors.success
+    color: COLORS.accentGreen
   },
   featureDisabled: {
-    color: colors.alert
+    color: COLORS.alertRed
   },
   lastEmptiedContainer: {
     borderTopWidth: 1,
@@ -405,7 +397,8 @@ const styles = StyleSheet.create({
     paddingTop: 8
   },
   lastEmptiedText: {
-    fontSize: 12,
+    fontSize: FONTS.size.small - 2,
+    fontWeight: FONTS.weight.regular,
     color: colors.textLight,
     textAlign: 'center'
   },
@@ -421,8 +414,8 @@ const styles = StyleSheet.create({
     borderRadius: 12
   },
   disabledText: {
-    fontSize: 16,
-    fontWeight: 'bold',
+    fontSize: FONTS.size.body,
+    fontWeight: FONTS.weight.bold,
     color: colors.disabled
   }
 });

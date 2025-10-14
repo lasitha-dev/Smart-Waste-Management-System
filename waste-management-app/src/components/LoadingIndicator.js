@@ -16,7 +16,7 @@ import {
   Easing,
   Dimensions
 } from 'react-native';
-import { colors } from '../constants/colors';
+import colors from '../constants/colors';
 import spacing from '../constants/spacing';
 import typography from '../constants/typography';
 

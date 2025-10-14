@@ -35,6 +35,7 @@ import {
   ErrorTypes,
   ErrorSeverity 
 } from '../../utils/errorHandling';
+import { COLORS, FONTS } from '../../constants/theme';
 import colors from '../../constants/colors';
 import spacing from '../../constants/spacing';
 import typography from '../../constants/typography';
