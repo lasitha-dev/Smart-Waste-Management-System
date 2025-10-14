@@ -3,20 +3,23 @@
  * Displays a single stop item in the route management list
  */
 
-import React from 'react';
+import React, { useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { COLORS, FONTS } from '../constants/theme';
+import BinDetailsModal from './BinDetailsModal';
 
 /**
  * RouteListItem
  * Renders a card displaying stop information including bin ID, address, and priority
  * @param {Object} props - Component props
  * @param {Object} props.stop - Stop object containing id, binId, address, status, and priority
+ * @param {Function} props.onStatusUpdate - Callback to update stop status
  * @returns {JSX.Element} The RouteListItem component
  */
-const RouteListItem = ({ stop }) => {
+const RouteListItem = ({ stop, onStatusUpdate }) => {
   const navigation = useNavigation();
+  const [modalVisible, setModalVisible] = useState(false);
 
   /**
    * Get priority tag color based on priority level
@@ -37,29 +40,83 @@ const RouteListItem = ({ stop }) => {
   };
 
   /**
-   * Handle press event to navigate to ScanBin screen
+   * Handle press event to open modal or navigate
    */
   const handlePress = () => {
+    if (stop.status === 'completed') {
+      // If already completed, navigate to scan screen
+      navigation.navigate('ScanBin', { stop });
+    } else {
+      // Otherwise, show modal for collection confirmation
+      setModalVisible(true);
+    }
+  };
+
+  /**
+   * Handle confirm collection action
+   */
+  const handleConfirmCollection = () => {
+    if (onStatusUpdate) {
+      onStatusUpdate(stop.id, 'completed');
+    }
+    setModalVisible(false);
+  };
+
+  /**
+   * Handle report issue action
+   */
+  const handleReportIssue = () => {
+    setModalVisible(false);
     navigation.navigate('ScanBin', { stop });
   };
 
+  /**
+   * Close modal
+   */
+  const handleCloseModal = () => {
+    setModalVisible(false);
+  };
+
+  const isCompleted = stop.status === 'completed';
+
   return (
-    <TouchableOpacity 
-      style={styles.container} 
-      onPress={handlePress}
-      activeOpacity={0.7}
-      testID={`route-item-${stop.id}`}
-    >
-      <View style={styles.contentContainer}>
-        <View style={styles.mainInfo}>
-          <Text style={styles.binId}>{stop.binId}</Text>
-          <Text style={styles.address}>{stop.address}</Text>
+    <>
+      <TouchableOpacity 
+        style={[
+          styles.container,
+          isCompleted && styles.completedContainer
+        ]} 
+        onPress={handlePress}
+        activeOpacity={0.7}
+        testID={`route-item-${stop.id}`}
+      >
+        <View style={styles.contentContainer}>
+          <View style={styles.mainInfo}>
+            <View style={styles.binIdRow}>
+              <Text style={styles.binId}>{stop.binId}</Text>
+              {isCompleted && (
+                <Text style={styles.completedBadge} testID={`status-${stop.id}`}>
+                  ✓ Completed
+                </Text>
+              )}
+            </View>
+            <Text style={styles.address}>{stop.address}</Text>
+          </View>
+          <View style={[styles.priorityTag, { backgroundColor: getPriorityColor(stop.priority) }]}>
+            <Text style={styles.priorityText}>{stop.priority}</Text>
+          </View>
         </View>
-        <View style={[styles.priorityTag, { backgroundColor: getPriorityColor(stop.priority) }]}>
-          <Text style={styles.priorityText}>{stop.priority}</Text>
-        </View>
-      </View>
-    </TouchableOpacity>
+      </TouchableOpacity>
+
+      <BinDetailsModal
+        visible={modalVisible}
+        binId={stop.binId}
+        location={stop.address}
+        onConfirm={handleConfirmCollection}
+        onReportIssue={handleReportIssue}
+        onClose={handleCloseModal}
+      />
+    </>
   );
 };
 
@@ -110,6 +167,23 @@ const styles = StyleSheet.create({
     fontWeight: FONTS.weight.semiBold,
     color: COLORS.textPrimary,
     textTransform: 'capitalize',
+  },
+  completedContainer: {
+    opacity: 0.7,
+    borderWidth: 2,
+    borderColor: COLORS.accentGreen,
+  },
+  binIdRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    flexWrap: 'wrap',
+    marginBottom: 4,
+  },
+  completedBadge: {
+    fontSize: FONTS.size.small,
+    fontWeight: FONTS.weight.semiBold,
+    color: COLORS.accentGreen,
+    marginLeft: 8,
   },
 });
 

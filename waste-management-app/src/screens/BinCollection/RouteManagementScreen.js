@@ -17,13 +17,29 @@ import { MOCK_STOPS } from '../../api/mockData';
 const RouteManagementScreen = () => {
   // State to manage the list of stops
   const [stops, setStops] = useState(MOCK_STOPS);
+
+  /**
+   * Updates the status of a stop
+   * @param {number} stopId - ID of the stop to update
+   * @param {string} newStatus - New status value
+   */
+  const updateStopStatus = (stopId, newStatus) => {
+    setStops((prevStops) =>
+      prevStops.map((stop) =>
+        stop.id === stopId ? { ...stop, status: newStatus } : stop
+      )
+    );
+  };
+
   /**
    * Renders a single route list item
    * @param {Object} params - Render item parameters
    * @param {Object} params.item - Stop object
    * @returns {JSX.Element} RouteListItem component
    */
-  const renderItem = ({ item }) => <RouteListItem stop={item} />;
+  const renderItem = ({ item }) => (
+    <RouteListItem stop={item} onStatusUpdate={updateStopStatus} />
+  );
 
   /**
    * Extracts the key for each item
