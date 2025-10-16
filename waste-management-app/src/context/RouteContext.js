@@ -4,7 +4,12 @@
  */
 
 import React, { createContext, useState, useContext } from 'react';
-import { MOCK_STOPS } from '../api/mockData';
+import { 
+  MOCK_STOPS, 
+  MOCK_ROUTE_INFO, 
+  MOCK_IMPACT_METRICS, 
+  MOCK_COLLECTIONS_BY_TYPE 
+} from '../api/mockData';
 
 /**
  * Create the Route Context
@@ -21,6 +26,15 @@ const RouteContext = createContext();
 export const RouteProvider = ({ children }) => {
   // State to manage the list of stops
   const [stops, setStops] = useState(MOCK_STOPS);
+  
+  // State for route information
+  const [routeInfo] = useState(MOCK_ROUTE_INFO);
+  
+  // State for impact metrics
+  const [impactMetrics] = useState(MOCK_IMPACT_METRICS);
+  
+  // State for collections by type
+  const [collectionsByType] = useState(MOCK_COLLECTIONS_BY_TYPE);
 
   /**
    * Updates the status of a stop
@@ -64,23 +78,54 @@ export const RouteProvider = ({ children }) => {
     const completed = stops.filter((stop) => stop.status === 'completed').length;
     const pending = stops.filter((stop) => stop.status === 'pending').length;
     const total = stops.length;
-    const efficiency = total > 0 ? Math.round((completed / total) * 100) : 0;
+    const percentage = total > 0 ? Math.round((completed / total) * 100) : 0;
+    const efficiency = percentage; // Efficiency equals completion percentage
+
+    // Calculate ETA based on current time and estimated completion rate
+    const now = new Date();
+    const hoursToComplete = pending * 0.25; // Assume 15 minutes per stop
+    const etaDate = new Date(now.getTime() + hoursToComplete * 60 * 60 * 1000);
+    const eta = etaDate.toLocaleTimeString('en-US', { 
+      hour: 'numeric', 
+      minute: '2-digit',
+      hour12: true 
+    });
 
     return {
       completed,
-      pending,
+      remaining: pending,
       total,
       efficiency: `${efficiency}%`,
+      percentage,
+      eta,
       issues: 0, // Placeholder for future implementation
     };
   };
 
+  /**
+   * Gets pending stops sorted by priority
+   * @returns {Array} Array of pending stops sorted by priority (high first)
+   */
+  const getPendingStops = () => {
+    const priorityOrder = { high: 0, normal: 1, low: 2 };
+    
+    return stops
+      .filter((stop) => stop.status === 'pending')
+      .sort((a, b) => {
+        return priorityOrder[a.priority] - priorityOrder[b.priority];
+      });
+  };
+
   const value = {
     stops,
+    routeInfo,
+    impactMetrics,
+    collectionsByType,
     updateStopStatus,
     handleCollectionConfirmed,
     getStopByBinId,
     getStatistics,
+    getPendingStops,
   };
 
   return <RouteContext.Provider value={value}>{children}</RouteContext.Provider>;

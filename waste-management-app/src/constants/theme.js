@@ -24,10 +24,25 @@ export const COLORS = {
   // Background Colors
   cardBackground: '#F9FAFB',
   modalBackground: '#FFFFFF',
+  lightBackground: '#F0F9FF', // Light blue-gray for screen background
+  lightCard: '#FFFFFF', // White for cards on light background
 
-  // Progress Bar Gradient
+  // Progress Bar Colors
   progressStart: '#34D399',
   progressEnd: '#6EE7B7', // Lighter green for gradient
+  progressBarBg: '#E5E7EB', // Light gray for progress bar background
+  progressBarFill: '#1F2937', // Dark gray/black for filled progress
+
+  // Icon Colors
+  iconTeal: '#14B8A6', // Teal for icons
+  iconBlue: '#3B82F6', // Blue for icons
+  iconOrange: '#F97316', // Orange for accent/emoji replacement
+  iconGreen: '#10B981', // Green for recycling icon
+  iconGray: '#6B7280', // Gray for CO2 icon
+
+  // Badge Colors
+  badgeHigh: '#DC2626', // Red for high priority badge
+  badgeNormal: '#6B7280', // Gray for normal priority
 };
 
 /**
@@ -47,6 +62,7 @@ export const FONTS = {
     subheading: 18,   // For subheadings (e.g., "Route Management")
     body: 16,         // For body text and list items
     small: 14,        // For secondary text
+    caption: 12,      // For captions and smallest text
   },
 
   // Font Weights
