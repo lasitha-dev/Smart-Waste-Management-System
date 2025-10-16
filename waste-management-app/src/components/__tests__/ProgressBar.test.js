@@ -53,7 +53,9 @@ describe('ProgressBar', () => {
       const fill = getByTestId('progress-bar-fill');
       
       expect(fill.props.style).toEqual(
-        expect.objectContaining({ width: '0%' })
+        expect.arrayContaining([
+          expect.objectContaining({ width: '0%' })
+        ])
       );
     });
 
@@ -62,7 +64,9 @@ describe('ProgressBar', () => {
       const fill = getByTestId('progress-bar-fill');
       
       expect(fill.props.style).toEqual(
-        expect.objectContaining({ width: '50%' })
+        expect.arrayContaining([
+          expect.objectContaining({ width: '50%' })
+        ])
       );
     });
 
@@ -71,7 +75,9 @@ describe('ProgressBar', () => {
       const fill = getByTestId('progress-bar-fill');
       
       expect(fill.props.style).toEqual(
-        expect.objectContaining({ width: '100%' })
+        expect.arrayContaining([
+          expect.objectContaining({ width: '100%' })
+        ])
       );
     });
 
@@ -80,7 +86,9 @@ describe('ProgressBar', () => {
       const fill = getByTestId('progress-bar-fill');
       
       expect(fill.props.style).toEqual(
-        expect.objectContaining({ width: '100%' })
+        expect.arrayContaining([
+          expect.objectContaining({ width: '100%' })
+        ])
       );
     });
 
@@ -89,7 +97,9 @@ describe('ProgressBar', () => {
       const fill = getByTestId('progress-bar-fill');
       
       expect(fill.props.style).toEqual(
-        expect.objectContaining({ width: '0%' })
+        expect.arrayContaining([
+          expect.objectContaining({ width: '0%' })
+        ])
       );
     });
   });
@@ -125,7 +135,9 @@ describe('ProgressBar', () => {
       const fill = getByTestId('progress-bar-fill');
       
       expect(fill.props.style).toEqual(
-        expect.objectContaining({ backgroundColor: COLORS.progressBarFill })
+        expect.arrayContaining([
+          expect.objectContaining({ backgroundColor: COLORS.progressBarFill })
+        ])
       );
     });
 
@@ -137,7 +149,9 @@ describe('ProgressBar', () => {
       const fill = getByTestId('progress-bar-fill');
       
       expect(fill.props.style).toEqual(
-        expect.objectContaining({ backgroundColor: customColor })
+        expect.arrayContaining([
+          expect.objectContaining({ backgroundColor: customColor })
+        ])
       );
     });
   });
@@ -186,7 +200,9 @@ describe('ProgressBar', () => {
       const fill = getByTestId('progress-bar-fill');
       
       expect(fill.props.style).toEqual(
-        expect.objectContaining({ width: '45.7%' })
+        expect.arrayContaining([
+          expect.objectContaining({ width: '45.7%' })
+        ])
       );
     });
 
@@ -195,7 +211,11 @@ describe('ProgressBar', () => {
       const fill = getByTestId('progress-bar-fill');
       
       // Should convert string to number
-      expect(fill.props.style.width).toBeTruthy();
+      expect(fill.props.style).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({ width: '60%' })
+        ])
+      );
     });
 
     it('should handle undefined percentage as 0', () => {
@@ -203,7 +223,9 @@ describe('ProgressBar', () => {
       const fill = getByTestId('progress-bar-fill');
       
       expect(fill.props.style).toEqual(
-        expect.objectContaining({ width: '0%' })
+        expect.arrayContaining([
+          expect.objectContaining({ width: '0%' })
+        ])
       );
     });
 
@@ -212,7 +234,9 @@ describe('ProgressBar', () => {
       const fill = getByTestId('progress-bar-fill');
       
       expect(fill.props.style).toEqual(
-        expect.objectContaining({ width: '0%' })
+        expect.arrayContaining([
+          expect.objectContaining({ width: '0%' })
+        ])
       );
     });
   });
