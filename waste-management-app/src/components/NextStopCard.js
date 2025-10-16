@@ -1,12 +1,11 @@
 /**
  * NextStopCard Component
- * Displays the next stop information with sequence, bin ID, address, priority, distance, and fill level
+ * Displays the next stop information with sequence, bin ID, address, weight, fill level, and status
  */
 
 import React from 'react';
 import { TouchableOpacity, View, Text, StyleSheet } from 'react-native';
 import { COLORS, FONTS } from '../constants/theme';
-import PriorityBadge from './PriorityBadge';
 
 /**
  * NextStopCard Component
@@ -28,13 +27,27 @@ const NextStopCard = ({
   const {
     binId = '',
     address = '',
-    priority,
-    distance = '',
+    status = '',
+    weight,
     fillLevel,
   } = stop;
 
   const testID = `next-stop-card-${sequence}`;
   const fillLevelDisplay = fillLevel != null ? `${fillLevel}%` : '';
+  const weightDisplay = weight != null ? `${weight}kg` : '';
+
+  const getStatusColor = (statusValue) => {
+    switch (statusValue) {
+      case 'completed':
+        return '#1F2937';
+      case 'pending':
+        return '#F59E0B';
+      case 'issue':
+        return '#EF4444';
+      default:
+        return '#6B7280';
+    }
+  };
 
   const handlePress = () => {
     if (onPress) {
@@ -57,28 +70,30 @@ const NextStopCard = ({
 
       {/* Content */}
       <View style={styles.content}>
-        {/* Bin ID and Priority */}
+        {/* Bin ID and Status Badge */}
         <View style={styles.headerRow}>
           <Text style={styles.binId}>{binId}</Text>
-          {priority && (
-            <PriorityBadge priority={priority} style={styles.priorityBadge} />
+          {status && (
+            <View style={[styles.statusBadge, { backgroundColor: getStatusColor(status) }]}>
+              <Text style={styles.statusText}>{status}</Text>
+            </View>
           )}
         </View>
 
         {/* Address */}
         <Text style={styles.address}>{address}</Text>
 
-        {/* Distance and Fill Level */}
+        {/* Weight and Fill Level */}
         <View style={styles.infoRow}>
-          {distance && (
+          {weight != null && (
             <View style={styles.infoItem}>
-              <Text style={styles.infoIcon}>📍</Text>
-              <Text style={styles.infoText}>{distance}</Text>
+              <Text style={styles.infoIcon}>⚖️</Text>
+              <Text style={styles.infoText}>{weightDisplay}</Text>
             </View>
           )}
           {fillLevel != null && (
             <View style={styles.infoItem}>
-              <Text style={styles.infoIcon}>🗑️</Text>
+              <Text style={styles.infoIcon}>📊</Text>
               <Text style={styles.infoText}>{fillLevelDisplay}</Text>
             </View>
           )}
@@ -137,8 +152,16 @@ const styles = StyleSheet.create({
     color: COLORS.primaryDarkTeal,
     marginRight: 8,
   },
-  priorityBadge: {
-    marginLeft: 0,
+  statusBadge: {
+    paddingHorizontal: 10,
+    paddingVertical: 3,
+    borderRadius: 10,
+  },
+  statusText: {
+    fontSize: 11,
+    fontWeight: FONTS.weight.semiBold,
+    color: '#FFFFFF',
+    textTransform: 'capitalize',
   },
   address: {
     fontSize: FONTS.size.small,

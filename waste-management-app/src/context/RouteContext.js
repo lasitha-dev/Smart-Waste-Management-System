@@ -71,6 +71,19 @@ export const RouteProvider = ({ children }) => {
   };
 
   /**
+   * Updates technical details of a stop (status, weight, fillLevel)
+   * @param {string} binId - The bin ID to update
+   * @param {Object} updates - Object with fields to update (status, weight, fillLevel)
+   */
+  const updateStopDetails = (binId, updates) => {
+    setStops((prevStops) =>
+      prevStops.map((stop) =>
+        stop.binId === binId ? { ...stop, ...updates } : stop
+      )
+    );
+  };
+
+  /**
    * Gets statistics from current stops
    * @returns {Object} Statistics object
    */
@@ -103,14 +116,15 @@ export const RouteProvider = ({ children }) => {
   };
 
   /**
-   * Gets pending stops sorted by priority
-   * @returns {Array} Array of pending stops sorted by priority (high first)
+   * Gets all stops sorted by priority (excluding initially completed ones)
+   * Returns all stops to keep them visible in Next Stops even after status updates
+   * @returns {Array} Array of stops sorted by priority (high first)
    */
   const getPendingStops = () => {
     const priorityOrder = { high: 0, normal: 1, low: 2 };
     
     return stops
-      .filter((stop) => stop.status === 'pending')
+      .slice(0, 3) // Get first 3 stops (the initially pending ones)
       .sort((a, b) => {
         return priorityOrder[a.priority] - priorityOrder[b.priority];
       });
@@ -124,6 +138,7 @@ export const RouteProvider = ({ children }) => {
     updateStopStatus,
     handleCollectionConfirmed,
     getStopByBinId,
+    updateStopDetails,
     getStatistics,
     getPendingStops,
   };

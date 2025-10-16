@@ -46,6 +46,7 @@ export const MOCK_STOPS = [
     priority: 'high',
     distance: '0.2 km',
     fillLevel: 95,
+    weight: 18.5,
     collectionType: 'general',
   },
   {
@@ -56,6 +57,7 @@ export const MOCK_STOPS = [
     priority: 'normal',
     distance: '0.5 km',
     fillLevel: 78,
+    weight: 14.2,
     collectionType: 'recyclable',
   },
   {
@@ -66,6 +68,7 @@ export const MOCK_STOPS = [
     priority: 'normal',
     distance: '0.8 km',
     fillLevel: 65,
+    weight: 12.8,
     collectionType: 'organic',
   },
   {
@@ -76,6 +79,7 @@ export const MOCK_STOPS = [
     priority: 'high',
     distance: '1.2 km',
     fillLevel: 88,
+    weight: 16.3,
     collectionType: 'general',
   },
   {
@@ -86,6 +90,7 @@ export const MOCK_STOPS = [
     priority: 'normal',
     distance: '1.5 km',
     fillLevel: 72,
+    weight: 13.5,
     collectionType: 'recyclable',
   },
   {
@@ -96,6 +101,7 @@ export const MOCK_STOPS = [
     priority: 'normal',
     distance: '1.8 km',
     fillLevel: 55,
+    weight: 10.2,
     collectionType: 'organic',
   },
   {
@@ -106,6 +112,7 @@ export const MOCK_STOPS = [
     priority: 'high',
     distance: '2.1 km',
     fillLevel: 92,
+    weight: 17.8,
     collectionType: 'general',
   },
 ];

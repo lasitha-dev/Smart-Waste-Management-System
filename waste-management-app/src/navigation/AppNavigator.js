@@ -5,6 +5,7 @@
 
 import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import DashboardScreen from '../screens/BinCollection/DashboardScreen';
 import RouteManagementScreen from '../screens/BinCollection/RouteManagementScreen';
 import ScanBinScreen from '../screens/BinCollection/ScanBinScreen';
 import { COLORS, FONTS } from '../constants/theme';
@@ -19,7 +20,7 @@ const Stack = createNativeStackNavigator();
 const AppNavigator = () => {
   return (
     <Stack.Navigator
-      initialRouteName="RouteManagement"
+      initialRouteName="Dashboard"
       screenOptions={{
         headerStyle: {
           backgroundColor: COLORS.primaryDarkTeal,
@@ -31,6 +32,14 @@ const AppNavigator = () => {
         },
       }}
     >
+      <Stack.Screen
+        name="Dashboard"
+        component={DashboardScreen}
+        options={{
+          title: 'Dashboard',
+          headerShown: false,
+        }}
+      />
       <Stack.Screen
         name="RouteManagement"
         component={RouteManagementScreen}
