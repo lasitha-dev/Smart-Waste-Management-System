@@ -60,6 +60,21 @@ jest.mock('../../../api/mockData', () => ({
       priority: 'low',
     },
   ],
+  MOCK_ROUTE_INFO: {
+    routeNumber: 'Route #12',
+    district: 'Central District',
+    assignedTo: 'Alex',
+  },
+  MOCK_IMPACT_METRICS: {
+    recycled: { value: 1.2, unit: 'tons' },
+    co2Saved: { value: 89, unit: 'kg' },
+    treesSaved: { value: 3.2, unit: '' },
+  },
+  MOCK_COLLECTIONS: [
+    { id: 1, type: 'General', icon: 'trash', count: 28 },
+    { id: 2, type: 'Recyclable', icon: 'recycle', count: 15 },
+    { id: 3, type: 'Organic', icon: 'leaf', count: 10 },
+  ],
 }));
 
 describe('RouteManagementScreen Integration Tests', () => {
@@ -74,18 +89,19 @@ describe('RouteManagementScreen Integration Tests', () => {
       </RouteProvider>
     );
 
-    // Verify initial state - item should not have completed badge
-    expect(screen.queryByTestId('status-1')).toBeNull();
+    // Verify initial state - check completed count is 0
+    const completedCard = screen.getByTestId('stat-card-completed');
+    expect(completedCard).toHaveTextContent('0');
+    expect(completedCard).toHaveTextContent('Completed');
 
     // Act - Press the first route item to open the modal
-    const firstItem = screen.getByTestId('route-item-1');
+    const firstItem = screen.getByTestId('next-stop-card-1');
     fireEvent.press(firstItem);
 
     // Assert - Modal should appear with bin details
     await waitFor(() => {
       const modal = screen.getByTestId('bin-details-modal');
       expect(modal).toBeTruthy();
-      // Note: BIN-001 appears both in list and modal, so we just verify modal is present
     });
 
     // Act - Confirm the collection
@@ -97,16 +113,15 @@ describe('RouteManagementScreen Integration Tests', () => {
       expect(screen.queryByTestId('bin-details-modal')).toBeNull();
     });
 
-    // Assert - Status should change to 'completed' with visual indicator
+    // Assert - Completed count should increase to 1
     await waitFor(() => {
-      const statusBadge = screen.getByTestId('status-1');
-      expect(statusBadge).toBeTruthy();
-      expect(statusBadge).toHaveTextContent('✓ Completed');
+      const updatedCompletedCard = screen.getByTestId('stat-card-completed');
+      expect(updatedCompletedCard).toHaveTextContent('1');
     });
 
-    // Assert - Item should have completed styling
-    const completedItem = screen.getByTestId('route-item-1');
-    expect(completedItem).toBeTruthy();
+    // Assert - Remaining count should decrease to 2
+    const remainingCard = screen.getByTestId('stat-card-remaining');
+    expect(remainingCard).toHaveTextContent('2');
   });
 
   /**
@@ -121,7 +136,7 @@ describe('RouteManagementScreen Integration Tests', () => {
     );
 
     // Act - Complete the first item
-    const firstItem = screen.getByTestId('route-item-1');
+    const firstItem = screen.getByTestId('next-stop-card-1');
     fireEvent.press(firstItem);
 
     await waitFor(() => {
@@ -131,13 +146,23 @@ describe('RouteManagementScreen Integration Tests', () => {
     const confirmButton = screen.getByTestId('confirm-collection-button');
     fireEvent.press(confirmButton);
 
-    // Assert - First item should be completed
+    // Wait for modal to close
     await waitFor(() => {
-      expect(screen.getByTestId('status-1')).toBeTruthy();
+      expect(screen.queryByTestId('bin-details-modal')).toBeNull();
     });
 
-    // Assert - Other items should NOT have completed status
-    expect(screen.queryByTestId('status-2')).toBeNull();
-    expect(screen.queryByTestId('status-3')).toBeNull();
+    // Assert - Completed count should be 1
+    await waitFor(() => {
+      const completedCard = screen.getByTestId('stat-card-completed');
+      expect(completedCard).toHaveTextContent('1');
+    });
+
+    // Assert - Remaining count should be 2 (other items still pending)
+    const remainingCard = screen.getByTestId('stat-card-remaining');
+    expect(remainingCard).toHaveTextContent('2');
+
+    // Assert - Other stop cards should still be visible (not removed from list)
+    expect(screen.getByTestId('next-stop-card-2')).toBeTruthy();
+    expect(screen.getByTestId('next-stop-card-3')).toBeTruthy();
   });
 });

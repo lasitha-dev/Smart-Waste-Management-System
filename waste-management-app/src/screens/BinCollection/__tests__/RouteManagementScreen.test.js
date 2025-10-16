@@ -46,6 +46,11 @@ jest.mock('../../../context/RouteContext', () => ({
   useRoute: () => ({
     stops: mockStops,
     updateStopStatus: jest.fn(),
+    routeInfo: {
+      routeNumber: 'Route#12',
+      district: 'Central District',
+      assignedTo: 'Alex',
+    },
   }),
 }));
 

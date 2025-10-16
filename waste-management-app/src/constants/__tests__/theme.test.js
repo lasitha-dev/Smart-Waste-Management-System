@@ -98,6 +98,30 @@ describe('COLORS', () => {
       expect(typeof COLORS.badgeNormal).toBe('string');
     });
 
+    it('should have headerTeal color defined', () => {
+      expect(COLORS.headerTeal).toBeDefined();
+      expect(typeof COLORS.headerTeal).toBe('string');
+      expect(COLORS.headerTeal).toMatch(/^#[0-9A-F]{6}$/i);
+    });
+
+    it('should have headerCompletedBlue color defined', () => {
+      expect(COLORS.headerCompletedBlue).toBeDefined();
+      expect(typeof COLORS.headerCompletedBlue).toBe('string');
+      expect(COLORS.headerCompletedBlue).toMatch(/^#[0-9A-F]{6}$/i);
+    });
+
+    it('should have headerEfficiencyGreen color defined', () => {
+      expect(COLORS.headerEfficiencyGreen).toBeDefined();
+      expect(typeof COLORS.headerEfficiencyGreen).toBe('string');
+      expect(COLORS.headerEfficiencyGreen).toMatch(/^#[0-9A-F]{6}$/i);
+    });
+
+    it('should have appBackground color defined', () => {
+      expect(COLORS.appBackground).toBeDefined();
+      expect(typeof COLORS.appBackground).toBe('string');
+      expect(COLORS.appBackground).toMatch(/^#[0-9A-F]{6}$/i);
+    });
+
     it('should have lightCard color defined', () => {
       expect(COLORS.lightCard).toBeDefined();
       expect(typeof COLORS.lightCard).toBe('string');

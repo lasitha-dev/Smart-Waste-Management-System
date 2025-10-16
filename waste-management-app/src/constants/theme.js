@@ -26,12 +26,12 @@ export const COLORS = {
   modalBackground: '#FFFFFF',
   lightBackground: '#F0F9FF', // Light blue-gray for screen background
   lightCard: '#FFFFFF', // White for cards on light background
+  progressBarBg: '#E5E7EB', // Light gray for progress bar background
+  progressBarFill: '#1F2937', // Dark gray/black for filled progress
 
   // Progress Bar Colors
   progressStart: '#34D399',
   progressEnd: '#6EE7B7', // Lighter green for gradient
-  progressBarBg: '#E5E7EB', // Light gray for progress bar background
-  progressBarFill: '#1F2937', // Dark gray/black for filled progress
 
   // Icon Colors
   iconTeal: '#14B8A6', // Teal for icons
@@ -43,6 +43,12 @@ export const COLORS = {
   // Badge Colors
   badgeHigh: '#DC2626', // Red for high priority badge
   badgeNormal: '#6B7280', // Gray for normal priority
+
+  // Header card colors (for redesigned homepage)
+  headerTeal: '#2BA5A0', // Main teal for header card
+  headerCompletedBlue: '#4A90E2', // Blue for completed stat card
+  headerEfficiencyGreen: '#52C9A8', // Green for efficiency stat card
+  appBackground: '#F5F7FA', // Light gray app background
 };
 
 /**
