@@ -10,25 +10,47 @@ import {
 import { colors } from '../constants/colors';
 import { dimensions } from '../constants/dimensions';
 import BottomNavigationBar from '../components/BottomNavigationBar';
+import { mockDatabase, getCollectionStats, getUncollectedBins, getPatternAnalysis } from '../data/mockDatabase';
 
 const ReportsScreen = ({ navigation, onNavigate }) => {
-  const [selectedTab, setSelectedTab] = useState('Billing');
+  const [selectedTab, setSelectedTab] = useState('operational');
   const [selectedExport, setSelectedExport] = useState('CSV');
+  const [selectedPeriod, setSelectedPeriod] = useState('daily');
 
   const tabs = ['operational', 'Billing', 'Recycling'];
   const exportFormats = ['PDF', 'CSV', 'Excel'];
+  const periods = ['daily', 'weekly', 'monthly'];
 
+  // Get current date for daily stats
+  const currentDate = '2024-02-15';
+  const dailyStats = getCollectionStats(currentDate);
+  const uncollectedBins = getUncollectedBins(currentDate);
+  const patternAnalysis = getPatternAnalysis();
+
+  // Generate 7-day data for line chart
   const reportData = [
-    { day: 'Mon', value: 130 },
-    { day: 'Tue', value: 180 },
-    { day: 'Wed', value: 150 },
-    { day: 'Thu', value: 220 },
-    { day: 'Fri', value: 200 },
-    { day: 'Sat', value: 300 },
-    { day: 'Sun', value: 280 },
+    { day: 'Mon', value: 135, date: '2024-02-13' },
+    { day: 'Tue', value: 325, date: '2024-02-14' },
+    { day: 'Wed', value: 315, date: '2024-02-15' },
+    { day: 'Thu', value: 280, date: '2024-02-16' },
+    { day: 'Fri', value: 290, date: '2024-02-17' },
+    { day: 'Sat', value: 250, date: '2024-02-18' },
+    { day: 'Sun', value: 200, date: '2024-02-19' },
   ];
 
   const maxReportValue = Math.max(...reportData.map(item => item.value));
+
+  // Calculate collection statistics
+  const totalRegisteredBins = mockDatabase.bins.length;
+  const totalRegisteredTrucks = mockDatabase.trucks.filter(truck => truck.status === 'active').length;
+  const collectionRate = (dailyStats.totalBinsCollected / totalRegisteredBins) * 100;
+
+  // Bin status distribution
+  const binStatusData = [
+    { label: 'Collected', value: dailyStats.totalBinsCollected, color: '#4CAF50' },
+    { label: 'Uncollected', value: uncollectedBins.length, color: '#F44336' },
+    { label: 'Pending', value: Math.max(0, totalRegisteredBins - dailyStats.totalBinsCollected - uncollectedBins.length), color: '#FF9800' },
+  ];
 
   return (
     <View style={styles.container}>
@@ -113,9 +135,34 @@ const ReportsScreen = ({ navigation, onNavigate }) => {
 
         {/* Report View */}
         <View style={styles.reportSection}>
-          <Text style={styles.reportTitle}>Report View</Text>
+          <Text style={styles.reportTitle}>Waste Collection Report - {currentDate}</Text>
           
-          {/* Line Chart */}
+          {/* Key Metrics */}
+          <View style={styles.metricsContainer}>
+            <View style={styles.metricRow}>
+              <View style={styles.metricItem}>
+                <Text style={styles.metricLabel}>Total Bins Collected</Text>
+                <Text style={styles.metricValue}>{dailyStats.totalBinsCollected}</Text>
+              </View>
+              <View style={styles.metricItem}>
+                <Text style={styles.metricLabel}>Total Weight (kg)</Text>
+                <Text style={styles.metricValue}>{dailyStats.totalWeight}</Text>
+              </View>
+            </View>
+            <View style={styles.metricRow}>
+              <View style={styles.metricItem}>
+                <Text style={styles.metricLabel}>Collection Rate</Text>
+                <Text style={styles.metricValue}>{collectionRate.toFixed(1)}%</Text>
+              </View>
+              <View style={styles.metricItem}>
+                <Text style={styles.metricLabel}>Routes Covered</Text>
+                <Text style={styles.metricValue}>{dailyStats.totalRoutes}</Text>
+              </View>
+            </View>
+          </View>
+
+          {/* 7-Day Weight Trend Chart */}
+          <Text style={styles.chartTitle}>7-Day Waste Collection Trend (kg)</Text>
           <View style={styles.chartContainer}>
             <View style={styles.chart}>
               {reportData.map((item, index) => {
@@ -129,11 +176,13 @@ const ReportsScreen = ({ navigation, onNavigate }) => {
                         ]}
                     />
                     <Text style={styles.chartBarLabel}>{item.day}</Text>
+                    <Text style={styles.chartValueLabel}>{item.value}kg</Text>
                   </View>
                 );
               })}
             </View>
             <View style={styles.chartYAxis}>
+              <Text style={styles.chartYLabel}>350</Text>
               <Text style={styles.chartYLabel}>300</Text>
               <Text style={styles.chartYLabel}>250</Text>
               <Text style={styles.chartYLabel}>200</Text>
@@ -142,27 +191,41 @@ const ReportsScreen = ({ navigation, onNavigate }) => {
             </View>
           </View>
 
-          {/* Description */}
-          <Text style={styles.description}>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation.
-          </Text>
+          {/* Pattern Analysis Alert */}
+          {patternAnalysis.isSignificant && (
+            <View style={styles.alertContainer}>
+              <Text style={styles.alertTitle}>⚠️ Pattern Change Detected</Text>
+              <Text style={styles.alertText}>
+                Waste collection {patternAnalysis.trend} by {Math.abs(patternAnalysis.weightChange).toFixed(1)}% this week
+              </Text>
+            </View>
+          )}
 
-          {/* Pie Chart and Additional Data */}
-          <View style={styles.additionalDataContainer}>
-            <View style={styles.pieChartContainer}>
-              <View style={styles.pieChart}>
-                <Text style={styles.pieChartText}>Pie</Text>
-              </View>
+          {/* Bin Status Distribution */}
+          <Text style={styles.chartTitle}>Bin Collection Status</Text>
+          <View style={styles.pieChartContainer}>
+            <View style={styles.pieChart}>
+              <Text style={styles.pieChartText}>Status</Text>
             </View>
             <View style={styles.dataTextContainer}>
-              <Text style={styles.dataText}>Data analysis results</Text>
-              <Text style={styles.dataText}>Performance metrics</Text>
-              <Text style={styles.dataText}>Trend analysis</Text>
-              <TouchableOpacity style={styles.viewMoreButton}>
-                <Text style={styles.viewMoreText}>view more</Text>
-                <Text style={styles.viewMoreArrow}>▼</Text>
-              </TouchableOpacity>
+              {binStatusData.map((item, index) => (
+                <View key={index} style={styles.statusItem}>
+                  <View style={[styles.statusColor, { backgroundColor: item.color }]} />
+                  <Text style={styles.statusText}>{item.label}: {item.value}</Text>
+                </View>
+              ))}
             </View>
+          </View>
+
+          {/* System Summary */}
+          <View style={styles.summaryContainer}>
+            <Text style={styles.summaryTitle}>System Summary</Text>
+            <Text style={styles.summaryText}>
+              • Registered Bins: {totalRegisteredBins}{'\n'}
+              • Active Trucks: {totalRegisteredTrucks}{'\n'}
+              • Collection Efficiency: {dailyStats.collectionEfficiency.toFixed(1)}%{'\n'}
+              • Average Weight per Bin: {dailyStats.averageWeightPerBin.toFixed(1)}kg
+            </Text>
           </View>
         </View>
 
@@ -449,6 +512,99 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: '#2E7D32',
     fontWeight: 'bold',
+  },
+  // New styles for enhanced reports
+  metricsContainer: {
+    backgroundColor: colors.surface,
+    borderRadius: 8,
+    padding: 16,
+    marginBottom: 16,
+  },
+  metricRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 12,
+  },
+  metricItem: {
+    flex: 1,
+    alignItems: 'center',
+    marginHorizontal: 8,
+  },
+  metricLabel: {
+    fontSize: 12,
+    color: colors.textSecondary,
+    marginBottom: 4,
+    textAlign: 'center',
+  },
+  metricValue: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: colors.text,
+    textAlign: 'center',
+  },
+  chartTitle: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: colors.text,
+    marginBottom: 12,
+    marginTop: 8,
+  },
+  chartValueLabel: {
+    fontSize: 10,
+    color: colors.textSecondary,
+    textAlign: 'center',
+    marginTop: 2,
+  },
+  alertContainer: {
+    backgroundColor: '#FFF3CD',
+    borderColor: '#FFEAA7',
+    borderWidth: 1,
+    borderRadius: 8,
+    padding: 12,
+    marginBottom: 16,
+  },
+  alertTitle: {
+    fontSize: 14,
+    fontWeight: 'bold',
+    color: '#856404',
+    marginBottom: 4,
+  },
+  alertText: {
+    fontSize: 12,
+    color: '#856404',
+  },
+  statusItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 8,
+  },
+  statusColor: {
+    width: 12,
+    height: 12,
+    borderRadius: 6,
+    marginRight: 8,
+  },
+  statusText: {
+    fontSize: 12,
+    color: colors.text,
+    fontWeight: '500',
+  },
+  summaryContainer: {
+    backgroundColor: colors.surface,
+    borderRadius: 8,
+    padding: 16,
+    marginTop: 16,
+  },
+  summaryTitle: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: colors.text,
+    marginBottom: 8,
+  },
+  summaryText: {
+    fontSize: 14,
+    color: colors.text,
+    lineHeight: 20,
   },
 });
 
