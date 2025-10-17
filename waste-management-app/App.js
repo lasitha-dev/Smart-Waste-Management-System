@@ -1,20 +1,22 @@
+/**
+ * Smart Waste Management System - Main App
+ * Payment & Rewards Management Module
+ * Developer: Gabilan S (IT22060426)
+ */
+
+import React from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
+import { PaymentProvider } from './src/context/PaymentContext';
+import PaymentStack from './src/navigation/PaymentStack';
 
 export default function App() {
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <PaymentProvider>
+      <NavigationContainer>
+        <StatusBar style="light" />
+        <PaymentStack />
+      </NavigationContainer>
+    </PaymentProvider>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
