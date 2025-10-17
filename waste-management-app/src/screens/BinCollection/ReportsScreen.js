@@ -15,6 +15,7 @@ import {
 } from 'react-native';
 import { COLORS, FONTS } from '../../constants/theme';
 import { useBins } from '../../context/BinsContext';
+import { useUser } from '../../context/UserContext';
 import BinListItem from '../../components/BinListItem';
 import RegisterBinModal from '../../components/RegisterBinModal';
 import BottomNavigation from '../../components/BottomNavigation';
@@ -26,11 +27,13 @@ import BottomNavigation from '../../components/BottomNavigation';
  */
 const ReportsScreen = ({ navigation }) => {
   const { bins, addBin, updateBin, deleteBin, getAllBinsSorted } = useBins();
+  const { getUserDisplayName } = useUser();
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedBin, setSelectedBin] = useState(null);
   const [activeTab, setActiveTab] = useState('reports');
 
   const sortedBins = getAllBinsSorted();
+  const userName = getUserDisplayName();
 
   const handleAddBin = () => {
     setSelectedBin(null);
@@ -85,8 +88,7 @@ const ReportsScreen = ({ navigation }) => {
     if (tab === 'home') {
       navigation?.navigate('Dashboard');
     } else if (tab === 'profile') {
-      // Navigate to profile screen when implemented
-      console.log('Navigate to Profile');
+      navigation?.navigate('Profile');
     }
   };
 
@@ -100,7 +102,7 @@ const ReportsScreen = ({ navigation }) => {
           </View>
           <View style={styles.greeting}>
             <Text style={styles.greetingText}>Good morning</Text>
-            <Text style={styles.userName}>John Smith</Text>
+            <Text style={styles.userName}>{userName}</Text>
           </View>
         </View>
       </View>

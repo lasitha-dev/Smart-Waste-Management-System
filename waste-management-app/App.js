@@ -9,6 +9,7 @@ import { StatusBar } from 'expo-status-bar';
 import AppNavigator from './src/navigation/AppNavigator';
 import { RouteProvider } from './src/context/RouteContext';
 import { BinsProvider } from './src/context/BinsContext';
+import { UserProvider } from './src/context/UserContext';
 
 /**
  * App
@@ -17,13 +18,15 @@ import { BinsProvider } from './src/context/BinsContext';
  */
 export default function App() {
   return (
-    <BinsProvider>
-      <RouteProvider>
-        <NavigationContainer>
-          <AppNavigator />
-          <StatusBar style="light" />
-        </NavigationContainer>
-      </RouteProvider>
-    </BinsProvider>
+    <UserProvider>
+      <BinsProvider>
+        <RouteProvider>
+          <NavigationContainer>
+            <AppNavigator />
+            <StatusBar style="light" />
+          </NavigationContainer>
+        </RouteProvider>
+      </BinsProvider>
+    </UserProvider>
   );
 }

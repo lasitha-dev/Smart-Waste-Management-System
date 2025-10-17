@@ -8,6 +8,7 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, ScrollView, SafeAreaView, TouchableOpacity, RefreshControl } from 'react-native';
 import { COLORS, FONTS } from '../../constants/theme';
 import { useRoute } from '../../context/RouteContext';
+import { useUser } from '../../context/UserContext';
 import ProgressBar from '../../components/ProgressBar';
 import ImpactCard from '../../components/ImpactCard';
 import CollectionTypeItem from '../../components/CollectionTypeItem';
@@ -49,6 +50,7 @@ const DashboardScreen = ({ navigation }) => {
     impactMetrics, 
     collectionsByType 
   } = useRoute();
+  const { getUserFirstName } = useUser();
   
   const [currentTime, setCurrentTime] = useState(getCurrentTime());
   const [statusBarTime, setStatusBarTime] = useState(getCurrentTime());
@@ -57,6 +59,7 @@ const DashboardScreen = ({ navigation }) => {
   
   const stats = getStatistics();
   const greeting = getGreeting();
+  const userName = getUserFirstName();
 
   // Update clock every minute
   useEffect(() => {
@@ -93,8 +96,7 @@ const DashboardScreen = ({ navigation }) => {
     if (tab === 'reports') {
       navigation?.navigate('Reports');
     } else if (tab === 'profile') {
-      // Navigate to profile screen when implemented
-      console.log('Navigate to Profile');
+      navigation?.navigate('Profile');
     }
   };
 
@@ -126,7 +128,7 @@ const DashboardScreen = ({ navigation }) => {
           {/* Greeting Section */}
           <View style={styles.greetingSection}>
             <Text style={styles.greeting}>
-              {greeting}, {routeInfo.assignedTo}! 🧡
+              {greeting}, {userName}! 🧡
             </Text>
             <Text style={styles.routeInfo}>
               {routeInfo.routeNumber} - {routeInfo.district}

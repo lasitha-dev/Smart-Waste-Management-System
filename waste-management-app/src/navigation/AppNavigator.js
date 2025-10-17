@@ -9,6 +9,7 @@ import DashboardScreen from '../screens/BinCollection/DashboardScreen';
 import RouteManagementScreen from '../screens/BinCollection/RouteManagementScreen';
 import ScanBinScreen from '../screens/BinCollection/ScanBinScreen';
 import ReportsScreen from '../screens/BinCollection/ReportsScreen';
+import ProfileScreen from '../screens/BinCollection/ProfileScreen';
 import { COLORS, FONTS } from '../constants/theme';
 
 const Stack = createNativeStackNavigator();
@@ -62,6 +63,14 @@ const AppNavigator = () => {
         component={ReportsScreen}
         options={{
           title: 'Reports',
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="Profile"
+        component={ProfileScreen}
+        options={{
+          title: 'Profile',
           headerShown: false,
         }}
       />

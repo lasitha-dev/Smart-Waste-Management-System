@@ -58,8 +58,7 @@ const RouteManagementScreen = ({ navigation }) => {
     } else if (tab === 'reports') {
       navigation?.navigate('Reports');
     } else if (tab === 'profile') {
-      // Navigate to profile screen when implemented
-      console.log('Navigate to Profile');
+      navigation?.navigate('Profile');
     }
   };
 
