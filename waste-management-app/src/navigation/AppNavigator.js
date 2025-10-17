@@ -12,6 +12,18 @@ import ReportsScreen from '../screens/BinCollection/ReportsScreen';
 import ProfileScreen from '../screens/BinCollection/ProfileScreen';
 import { COLORS, FONTS } from '../constants/theme';
 
+// Import Analytics screens
+import AnalyticsDashboard from '../screens/Analytics/AnalyticsDashboard';
+import AnalyticsReportsScreen from '../screens/Analytics/ReportsScreen';
+import KPIsScreen from '../screens/Analytics/KPIsScreen';
+
+// Import other analytics-related screens
+import DataCollectionScreen from '../screens/DataCollectionScreen';
+import DataProcessingScreen from '../screens/DataProcessingScreen';
+import AnalysisScreen from '../screens/AnalysisScreen';
+import PerformanceMetricsScreen from '../screens/PerformanceMetricsScreen';
+import AnalyticsReportScreen from '../screens/ReportsScreen';
+
 const Stack = createNativeStackNavigator();
 
 /**
@@ -71,6 +83,70 @@ const AppNavigator = () => {
         component={ProfileScreen}
         options={{
           title: 'Profile',
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="AnalyticsDashboard"
+        component={AnalyticsDashboard}
+        options={{
+          title: 'Analytics Dashboard',
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="AnalyticsReports"
+        component={AnalyticsReportsScreen}
+        options={{
+          title: 'Analytics Reports',
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="KPIs"
+        component={KPIsScreen}
+        options={{
+          title: 'Key Performance Indicators',
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="DataCollection"
+        component={DataCollectionScreen}
+        options={{
+          title: 'Data Collection',
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="DataProcessing"
+        component={DataProcessingScreen}
+        options={{
+          title: 'Data Processing',
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="Analysis"
+        component={AnalysisScreen}
+        options={{
+          title: 'Analysis',
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="PerformanceMetrics"
+        component={PerformanceMetricsScreen}
+        options={{
+          title: 'Performance Metrics',
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="AnalyticsReport"
+        component={AnalyticsReportScreen}
+        options={{
+          title: 'Reports',
           headerShown: false,
         }}
       />

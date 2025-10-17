@@ -235,6 +235,22 @@ const DashboardScreen = ({ navigation }) => {
             />
           ))}
         </View>
+
+        {/* ANALYTICS SECTION */}
+        <View style={styles.analyticsSection}>
+          <Text style={styles.sectionTitle}>Data & Analytics</Text>
+          <TouchableOpacity 
+            style={styles.analyticsButton}
+            onPress={() => navigation?.navigate('AnalyticsDashboard')}
+          >
+            <Text style={styles.analyticsIcon}>📊</Text>
+            <View style={styles.analyticsTextContainer}>
+              <Text style={styles.analyticsTitle}>View Analytics Dashboard</Text>
+              <Text style={styles.analyticsSubtitle}>Reports, KPIs, and insights</Text>
+            </View>
+            <Text style={styles.analyticsArrow}>→</Text>
+          </TouchableOpacity>
+        </View>
       </ScrollView>
 
       {/* Bottom Navigation */}
@@ -413,6 +429,42 @@ const styles = StyleSheet.create({
   // COLLECTIONS SECTION
   collectionsSection: {
     paddingHorizontal: 16,
+  },
+
+  // ANALYTICS SECTION
+  analyticsSection: {
+    paddingHorizontal: 16,
+    marginTop: 20,
+  },
+  analyticsButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#E8F5E9',
+    borderRadius: 12,
+    padding: 16,
+    marginTop: 8,
+  },
+  analyticsIcon: {
+    fontSize: 32,
+    marginRight: 12,
+  },
+  analyticsTextContainer: {
+    flex: 1,
+  },
+  analyticsTitle: {
+    fontSize: 16,
+    fontWeight: FONTS.weight.bold,
+    color: COLORS.primaryDarkTeal,
+    marginBottom: 2,
+  },
+  analyticsSubtitle: {
+    fontSize: 12,
+    color: COLORS.textSecondary,
+  },
+  analyticsArrow: {
+    fontSize: 20,
+    color: COLORS.primaryDarkTeal,
+    fontWeight: 'bold',
   },
 });
 
