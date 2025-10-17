@@ -1,156 +1,295 @@
 /**
- * AppNavigator
- * Main navigation stack for the application
+ * AppNavigator - Dual Role Navigation System
+ * Handles navigation for both Admin (Scheduling) and Crew (Bin Collection) roles
+ * 
+ * Architecture:
+ * - AuthStack: Login and authentication
+ * - AdminStack: Scheduling, booking history, feedback (for admins/residents)
+ * - CrewStack: Bin collection, routes, analytics (for collection crews)
  */
 
 import React from 'react';
+import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { Text, Platform, ActivityIndicator, View } from 'react-native';
+import { useAuth, USER_ROLES } from '../context/AuthContext';
+import { COLORS, FONTS } from '../constants/theme';
+
+// Auth Screens
+import LoginScreen from '../screens/Auth/LoginScreen';
+
+// Crew Screens (Bin Collection)
 import DashboardScreen from '../screens/BinCollection/DashboardScreen';
 import RouteManagementScreen from '../screens/BinCollection/RouteManagementScreen';
 import ScanBinScreen from '../screens/BinCollection/ScanBinScreen';
-import ReportsScreen from '../screens/BinCollection/ReportsScreen';
-import ProfileScreen from '../screens/BinCollection/ProfileScreen';
-import { COLORS, FONTS } from '../constants/theme';
+import CrewReportsScreen from '../screens/BinCollection/ReportsScreen';
+import CrewProfileScreen from '../screens/BinCollection/ProfileScreen';
 
-// Import Analytics screens
+// Analytics Screens (Accessible by Crew)
 import AnalyticsDashboard from '../screens/Analytics/AnalyticsDashboard';
 import AnalyticsReportsScreen from '../screens/Analytics/ReportsScreen';
 import KPIsScreen from '../screens/Analytics/KPIsScreen';
-
-// Import other analytics-related screens
 import DataCollectionScreen from '../screens/DataCollectionScreen';
 import DataProcessingScreen from '../screens/DataProcessingScreen';
 import AnalysisScreen from '../screens/AnalysisScreen';
 import PerformanceMetricsScreen from '../screens/PerformanceMetricsScreen';
 import AnalyticsReportScreen from '../screens/ReportsScreen';
 
+// Admin Screens (Scheduling)
+import AdminHomeScreen from '../screens/Scheduling/HomeScreen';
+import SchedulePickupScreen from '../screens/Scheduling/SchedulePickup';
+import SelectDateTimeScreen from '../screens/Scheduling/SelectDateTime';
+import ConfirmBookingScreen from '../screens/Scheduling/ConfirmBooking';
+import ProvideFeedbackScreen from '../screens/Scheduling/ProvideFeedback';
+import BookingHistoryScreen from '../screens/BookingHistoryScreen';
+import AdminProfileScreen from '../screens/Admin/ProfileScreen';
+
 const Stack = createNativeStackNavigator();
+const Tab = createBottomTabNavigator();
 
 /**
- * AppNavigator
- * Defines the navigation stack with all app screens
- * @returns {JSX.Element} The navigation stack
+ * Loading Screen Component
  */
-const AppNavigator = () => {
+const LoadingScreen = () => (
+  <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#F5F7FA' }}>
+    <ActivityIndicator size="large" color={COLORS.accentGreen || '#4CAF50'} />
+    <Text style={{ marginTop: 16, fontSize: 16, color: '#666' }}>Loading...</Text>
+  </View>
+);
+
+/**
+ * AUTH STACK
+ * Shown when user is not authenticated
+ */
+const AuthStack = () => {
   return (
-    <Stack.Navigator
-      initialRouteName="Dashboard"
+    <Stack.Navigator screenOptions={{ headerShown: false }}>
+      <Stack.Screen name="Login" component={LoginScreen} />
+    </Stack.Navigator>
+  );
+};
+
+/**
+ * CREW BOTTOM TABS
+ * Main navigation for crew members (bin collection)
+ */
+const CrewTabs = () => {
+  return (
+    <Tab.Navigator
       screenOptions={{
-        headerStyle: {
-          backgroundColor: COLORS.primaryDarkTeal,
+        headerShown: false,
+        tabBarStyle: {
+          backgroundColor: '#FFFFFF',
+          borderTopWidth: 1,
+          borderTopColor: '#E0E0E0',
+          paddingBottom: Platform.OS === 'ios' ? 20 : 5,
+          paddingTop: 5,
+          height: Platform.OS === 'ios' ? 85 : 60,
         },
-        headerTintColor: COLORS.textPrimary,
-        headerTitleStyle: {
-          fontWeight: FONTS.weight.bold,
-          fontSize: FONTS.size.subheading,
+        tabBarActiveTintColor: '#006B5E',
+        tabBarInactiveTintColor: '#999',
+        tabBarLabelStyle: {
+          fontSize: 12,
+          fontWeight: '600',
         },
       }}
     >
-      <Stack.Screen
-        name="Dashboard"
+      <Tab.Screen
+        name="CrewDashboard"
         component={DashboardScreen}
         options={{
-          title: 'Dashboard',
-          headerShown: false,
+          tabBarLabel: 'Dashboard',
+          tabBarIcon: ({ color, size }) => (
+            <Text style={{ color, fontSize: size }}>🏠</Text>
+          ),
         }}
       />
-      <Stack.Screen
-        name="RouteManagement"
+      <Tab.Screen
+        name="Routes"
         component={RouteManagementScreen}
         options={{
-          title: 'Route Management',
-          headerShown: false,
+          tabBarLabel: 'Routes',
+          tabBarIcon: ({ color, size }) => (
+            <Text style={{ color, fontSize: size }}>🗺️</Text>
+          ),
         }}
       />
-      <Stack.Screen
-        name="ScanBin"
-        component={ScanBinScreen}
+      <Tab.Screen
+        name="CrewReports"
+        component={CrewReportsScreen}
         options={{
-          title: 'Scan Bin',
-          headerShown: true,
+          tabBarLabel: 'Reports',
+          tabBarIcon: ({ color, size }) => (
+            <Text style={{ color, fontSize: size }}>📋</Text>
+          ),
         }}
       />
-      <Stack.Screen
-        name="Reports"
-        component={ReportsScreen}
+      <Tab.Screen
+        name="CrewProfile"
+        component={CrewProfileScreen}
         options={{
-          title: 'Reports',
-          headerShown: false,
+          tabBarLabel: 'Profile',
+          tabBarIcon: ({ color, size }) => (
+            <Text style={{ color, fontSize: size }}>👤</Text>
+          ),
         }}
       />
-      <Stack.Screen
-        name="Profile"
-        component={ProfileScreen}
-        options={{
-          title: 'Profile',
-          headerShown: false,
-        }}
-      />
-      <Stack.Screen
-        name="AnalyticsDashboard"
-        component={AnalyticsDashboard}
-        options={{
-          title: 'Analytics Dashboard',
-          headerShown: false,
-        }}
-      />
-      <Stack.Screen
-        name="AnalyticsReports"
-        component={AnalyticsReportsScreen}
-        options={{
-          title: 'Analytics Reports',
-          headerShown: false,
-        }}
-      />
-      <Stack.Screen
-        name="KPIs"
-        component={KPIsScreen}
-        options={{
-          title: 'Key Performance Indicators',
-          headerShown: false,
-        }}
-      />
-      <Stack.Screen
-        name="DataCollection"
-        component={DataCollectionScreen}
-        options={{
-          title: 'Data Collection',
-          headerShown: false,
-        }}
-      />
-      <Stack.Screen
-        name="DataProcessing"
-        component={DataProcessingScreen}
-        options={{
-          title: 'Data Processing',
-          headerShown: false,
-        }}
-      />
-      <Stack.Screen
-        name="Analysis"
-        component={AnalysisScreen}
-        options={{
-          title: 'Analysis',
-          headerShown: false,
-        }}
-      />
-      <Stack.Screen
-        name="PerformanceMetrics"
-        component={PerformanceMetricsScreen}
-        options={{
-          title: 'Performance Metrics',
-          headerShown: false,
-        }}
-      />
-      <Stack.Screen
-        name="AnalyticsReport"
-        component={AnalyticsReportScreen}
-        options={{
-          title: 'Reports',
-          headerShown: false,
-        }}
-      />
+    </Tab.Navigator>
+  );
+};
+
+/**
+ * CREW STACK
+ * Complete navigation stack for crew members
+ */
+const CrewStack = () => {
+  return (
+    <Stack.Navigator screenOptions={{ headerShown: false }}>
+      {/* Main tabs */}
+      <Stack.Screen name="CrewTabs" component={CrewTabs} />
+      
+      {/* Additional crew screens */}
+      <Stack.Screen name="ScanBin" component={ScanBinScreen} />
+      <Stack.Screen name="RouteManagement" component={RouteManagementScreen} />
+      
+      {/* Analytics screens (accessible from crew dashboard) */}
+      <Stack.Screen name="AnalyticsDashboard" component={AnalyticsDashboard} />
+      <Stack.Screen name="AnalyticsReports" component={AnalyticsReportsScreen} />
+      <Stack.Screen name="KPIs" component={KPIsScreen} />
+      <Stack.Screen name="DataCollection" component={DataCollectionScreen} />
+      <Stack.Screen name="DataProcessing" component={DataProcessingScreen} />
+      <Stack.Screen name="Analysis" component={AnalysisScreen} />
+      <Stack.Screen name="PerformanceMetrics" component={PerformanceMetricsScreen} />
+      <Stack.Screen name="AnalyticsReport" component={AnalyticsReportScreen} />
     </Stack.Navigator>
+  );
+};
+
+/**
+ * ADMIN BOTTOM TABS
+ * Main navigation for admin/resident users (scheduling)
+ */
+const AdminTabs = () => {
+  return (
+    <Tab.Navigator
+      screenOptions={{
+        headerShown: false,
+        tabBarStyle: {
+          backgroundColor: '#FFFFFF',
+          borderTopWidth: 1,
+          borderTopColor: '#E0E0E0',
+          paddingBottom: Platform.OS === 'ios' ? 20 : 5,
+          paddingTop: 5,
+          height: Platform.OS === 'ios' ? 85 : 60,
+        },
+        tabBarActiveTintColor: '#2E7D32',
+        tabBarInactiveTintColor: '#999',
+        tabBarLabelStyle: {
+          fontSize: 12,
+          fontWeight: '600',
+        },
+      }}
+    >
+      <Tab.Screen
+        name="AdminHome"
+        component={AdminHomeScreen}
+        options={{
+          tabBarLabel: 'Home',
+          tabBarIcon: ({ color, size }) => (
+            <Text style={{ color, fontSize: size }}>🏠</Text>
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="Schedule"
+        component={SchedulePickupScreen}
+        options={{
+          tabBarLabel: 'Schedule',
+          tabBarIcon: ({ color, size }) => (
+            <Text style={{ color, fontSize: size }}>📅</Text>
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="History"
+        component={BookingHistoryScreen}
+        options={{
+          tabBarLabel: 'History',
+          tabBarIcon: ({ color, size }) => (
+            <Text style={{ color, fontSize: size }}>📋</Text>
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="AdminProfile"
+        component={AdminProfileScreen}
+        options={{
+          tabBarLabel: 'Profile',
+          tabBarIcon: ({ color, size }) => (
+            <Text style={{ color, fontSize: size }}>👤</Text>
+          ),
+        }}
+      />
+    </Tab.Navigator>
+  );
+};
+
+/**
+ * ADMIN STACK
+ * Complete navigation stack for admin/resident users
+ */
+const AdminStack = () => {
+  return (
+    <Stack.Navigator screenOptions={{ headerShown: false }}>
+      {/* Main tabs */}
+      <Stack.Screen name="AdminTabs" component={AdminTabs} />
+      
+      {/* Additional admin screens */}
+      <Stack.Screen name="SelectDateTime" component={SelectDateTimeScreen} />
+      <Stack.Screen name="ConfirmBooking" component={ConfirmBookingScreen} />
+      <Stack.Screen name="ProvideFeedback" component={ProvideFeedbackScreen} />
+    </Stack.Navigator>
+  );
+};
+
+/**
+ * ROOT NAVIGATOR
+ * Conditionally renders based on authentication state and user role
+ */
+const RootNavigator = () => {
+  const { isAuthenticated, isLoading, user, USER_ROLES } = useAuth();
+
+  // Show loading screen while checking auth state
+  if (isLoading) {
+    return <LoadingScreen />;
+  }
+
+  // Not authenticated - show login
+  if (!isAuthenticated) {
+    return <AuthStack />;
+  }
+
+  // Authenticated - show appropriate stack based on role
+  if (user?.role === USER_ROLES.ADMIN) {
+    return <AdminStack />;
+  } else if (user?.role === USER_ROLES.CREW) {
+    return <CrewStack />;
+  }
+
+  // Fallback (shouldn't reach here)
+  return <AuthStack />;
+};
+
+/**
+ * MAIN APP NAVIGATOR
+ * Wraps everything in NavigationContainer
+ */
+const AppNavigator = () => {
+  return (
+    <NavigationContainer>
+      <RootNavigator />
+    </NavigationContainer>
   );
 };
 
