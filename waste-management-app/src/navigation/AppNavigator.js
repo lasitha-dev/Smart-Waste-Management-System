@@ -8,6 +8,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import DashboardScreen from '../screens/BinCollection/DashboardScreen';
 import RouteManagementScreen from '../screens/BinCollection/RouteManagementScreen';
 import ScanBinScreen from '../screens/BinCollection/ScanBinScreen';
+import ReportsScreen from '../screens/BinCollection/ReportsScreen';
 import { COLORS, FONTS } from '../constants/theme';
 
 const Stack = createNativeStackNavigator();
@@ -54,6 +55,14 @@ const AppNavigator = () => {
         options={{
           title: 'Scan Bin',
           headerShown: true,
+        }}
+      />
+      <Stack.Screen
+        name="Reports"
+        component={ReportsScreen}
+        options={{
+          title: 'Reports',
+          headerShown: false,
         }}
       />
     </Stack.Navigator>

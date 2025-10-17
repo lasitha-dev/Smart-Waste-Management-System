@@ -11,6 +11,7 @@ import StatCard from '../../components/StatCard';
 import ProgressBar from '../../components/ProgressBar';
 import NextStopCard from '../../components/NextStopCard';
 import BinDetailsModal from '../../components/BinDetailsModal';
+import BottomNavigation from '../../components/BottomNavigation';
 
 /**
  * RouteManagementScreen
@@ -26,6 +27,7 @@ const RouteManagementScreen = ({ navigation }) => {
   // State for modal
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedBin, setSelectedBin] = useState(null);
+  const [activeTab, setActiveTab] = useState('home');
 
   const handleStopPress = (stop) => {
     // Open modal with bin details
@@ -47,6 +49,18 @@ const RouteManagementScreen = ({ navigation }) => {
   const handleMapViewPress = () => {
     // Navigate to map view (placeholder for future implementation)
     console.log('Navigate to map view');
+  };
+
+  const handleTabChange = (tab) => {
+    setActiveTab(tab);
+    if (tab === 'home') {
+      navigation?.navigate('Dashboard');
+    } else if (tab === 'reports') {
+      navigation?.navigate('Reports');
+    } else if (tab === 'profile') {
+      // Navigate to profile screen when implemented
+      console.log('Navigate to Profile');
+    }
   };
 
   return (
@@ -174,6 +188,9 @@ const RouteManagementScreen = ({ navigation }) => {
           )}
         </View>
       </ScrollView>
+
+      {/* Bottom Navigation */}
+      <BottomNavigation activeTab={activeTab} onTabChange={handleTabChange} />
     </SafeAreaView>
   );
 };

@@ -11,6 +11,7 @@ import { useRoute } from '../../context/RouteContext';
 import ProgressBar from '../../components/ProgressBar';
 import ImpactCard from '../../components/ImpactCard';
 import CollectionTypeItem from '../../components/CollectionTypeItem';
+import BottomNavigation from '../../components/BottomNavigation';
 
 /**
  * Get time-based greeting
@@ -52,6 +53,7 @@ const DashboardScreen = ({ navigation }) => {
   const [currentTime, setCurrentTime] = useState(getCurrentTime());
   const [statusBarTime, setStatusBarTime] = useState(getCurrentTime());
   const [refreshing, setRefreshing] = useState(false);
+  const [activeTab, setActiveTab] = useState('home');
   
   const stats = getStatistics();
   const greeting = getGreeting();
@@ -83,6 +85,17 @@ const DashboardScreen = ({ navigation }) => {
   // Handle progress section press
   const handleProgressPress = () => {
     navigation.navigate('RouteManagement');
+  };
+
+  // Handle tab change
+  const handleTabChange = (tab) => {
+    setActiveTab(tab);
+    if (tab === 'reports') {
+      navigation?.navigate('Reports');
+    } else if (tab === 'profile') {
+      // Navigate to profile screen when implemented
+      console.log('Navigate to Profile');
+    }
   };
 
   return (
@@ -221,6 +234,9 @@ const DashboardScreen = ({ navigation }) => {
           ))}
         </View>
       </ScrollView>
+
+      {/* Bottom Navigation */}
+      <BottomNavigation activeTab={activeTab} onTabChange={handleTabChange} />
     </SafeAreaView>
   );
 };

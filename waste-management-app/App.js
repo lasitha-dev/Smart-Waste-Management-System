@@ -8,6 +8,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { StatusBar } from 'expo-status-bar';
 import AppNavigator from './src/navigation/AppNavigator';
 import { RouteProvider } from './src/context/RouteContext';
+import { BinsProvider } from './src/context/BinsContext';
 
 /**
  * App
@@ -16,11 +17,13 @@ import { RouteProvider } from './src/context/RouteContext';
  */
 export default function App() {
   return (
-    <RouteProvider>
-      <NavigationContainer>
-        <AppNavigator />
-        <StatusBar style="light" />
-      </NavigationContainer>
-    </RouteProvider>
+    <BinsProvider>
+      <RouteProvider>
+        <NavigationContainer>
+          <AppNavigator />
+          <StatusBar style="light" />
+        </NavigationContainer>
+      </RouteProvider>
+    </BinsProvider>
   );
 }
